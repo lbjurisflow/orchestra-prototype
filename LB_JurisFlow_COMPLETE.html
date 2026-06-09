@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LB JurisFlow — Legal Work OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+:root{
+  --blue:#2563EB;--blue-light:#3B82F6;--blue-dark:#1D4ED8;--blue-glow:rgba(37,99,235,0.18);
+  --bg:#000;--bg1:#0A0A0F;--bg2:#0F1117;--bg3:#13151E;--bg4:#181B25;
+  --surface:#1C2030;--surface2:#222639;--surface3:#282D42;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.10);--border-blue:rgba(37,99,235,0.3);
+  --text:#F0F2F8;--text2:#C8CCE0;--muted:#7880A0;--faint:#4A5070;
+  --green:#10B981;--amber:#F59E0B;--red:#EF4444;--purple:#8B5CF6;--teal:#14B8A6;
+  --font:'Inter',system-ui,-apple-system,sans-serif;--mono:'SF Mono','Fira Code',monospace;
+  --r:12px;--rs:8px;--rl:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.5}
+button,input,select,textarea{font-family:var(--font)}
+button{cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* ── LOGO ── */
+.logo-wrap{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none;border:none;background:none}
+.logo-text{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.logo-text span{color:var(--blue-light)}
+
+/* ── SCREENS ── */
+#site{display:block}#login-screen{display:none}#app-screen{display:none}
+
+/* ══ NAV ══ */
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;padding:0 40px;gap:14px;background:rgba(0,0,0,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-links{display:flex;gap:22px;margin-left:28px}
+.nav-link{font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;transition:color .15s;padding:4px 0}
+.nav-link:hover{color:var(--text)}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-signin{font-size:13px;font-weight:500;padding:7px 16px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .15s}
+.btn-signin:hover{border-color:var(--border-blue);color:var(--text)}
+.btn-start{font-size:13px;font-weight:600;padding:7px 18px;border-radius:var(--rs);border:none;background:var(--blue);color:#fff;transition:all .15s}
+.btn-start:hover{background:var(--blue-light)}
+.btn-consult-nav{font-size:13px;font-weight:600;padding:7px 16px;border-radius:var(--rs);border:1px solid rgba(37,99,235,0.45);background:rgba(37,99,235,0.09);color:var(--blue-light);transition:all .15s}
+.btn-consult-nav:hover{background:rgba(37,99,235,0.18)}
+
+/* ══ HERO ══ */
+.hero{min-height:100vh;display:flex;align-items:center;padding:96px 40px 80px;overflow:hidden;position:relative}
+.hero-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:700px;background:radial-gradient(circle,rgba(37,99,235,0.1) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.014) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 60% at 50% 40%,black 30%,transparent 100%);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative;z-index:1}
+.h-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:18px}
+.h-title{font-size:50px;font-weight:800;line-height:1.06;letter-spacing:-2px;margin-bottom:18px}
+.h-title .blue{color:var(--blue-light)}
+.h-sub{font-size:16px;color:var(--text2);line-height:1.7;margin-bottom:28px;max-width:480px}
+.h-btns{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.btn-hp{font-size:14px;font-weight:700;padding:13px 26px;border-radius:var(--rs);border:none;background:var(--blue);color:#fff;transition:all .2s}
+.btn-hp:hover{background:var(--blue-light);transform:translateY(-1px);box-shadow:0 8px 32px rgba(37,99,235,0.35)}
+.btn-hg{font-size:14px;font-weight:500;padding:13px 22px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .2s}
+.btn-hg:hover{border-color:var(--border-blue);color:var(--text)}
+.btn-hc{font-size:14px;font-weight:600;padding:13px 22px;border-radius:var(--rs);border:1px solid rgba(37,99,235,0.4);background:rgba(37,99,235,0.07);color:var(--blue-light);transition:all .2s}
+.btn-hc:hover{background:rgba(37,99,235,0.14)}
+.h-pills{display:flex;gap:7px;flex-wrap:wrap}
+.pill{font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);background:var(--bg3)}
+
+/* MOCKUP */
+.mockup-frame{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8),0 0 0 1px rgba(255,255,255,0.04)}
+.mock-bar{height:34px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:5px}
+.md{width:9px;height:9px;border-radius:50%}
+.mock-url{flex:1;margin:0 10px;background:var(--surface);border-radius:4px;height:20px;display:flex;align-items:center;padding:0 9px;font-size:10.5px;color:var(--muted);font-family:var(--mono)}
+.mock-body{display:grid;grid-template-columns:155px 1fr;min-height:320px}
+.mock-sb{background:var(--bg3);border-right:1px solid var(--border);padding:11px}
+.mock-sb-logo{font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.mnav{padding:5px 7px;border-radius:5px;font-size:10.5px;color:var(--muted);margin:2px 0;display:flex;align-items:center;gap:6px}
+.mnav.on{background:rgba(37,99,235,0.12);color:var(--blue-light)}
+.mock-main{padding:13px;background:var(--bg2)}
+.mstats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
+.mstat{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:9px}
+.mstat-v{font-size:18px;font-weight:800;line-height:1}
+.mstat-l{font-size:9.5px;color:var(--muted);margin-top:2px}
+.mact{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:9px}
+.mact-t{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:7px}
+.mact-row{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid var(--border)}
+.mact-row:last-child{border-bottom:none}
+.mact-icon{width:20px;height:20px;border-radius:4px;background:rgba(37,99,235,0.15);color:var(--blue-light);font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.mact-text{font-size:10px;color:var(--text2);line-height:1.3}
+
+/* ══ STATS STRIP ══ */
+.stats-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:26px 40px;display:grid;grid-template-columns:repeat(4,1fr)}
+.si{text-align:center;padding:0 14px;border-right:1px solid var(--border)}
+.si:last-child{border-right:none}
+.si-num{font-size:32px;font-weight:800;color:var(--blue-light);line-height:1;margin-bottom:4px;letter-spacing:-1px}
+.si-lbl{font-size:11px;color:var(--muted)}
+
+/* ══ SECTIONS ══ */
+.sec{padding:76px 40px;max-width:1100px;margin:0 auto}
+.sec-dark{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:10px}
+.sec-h{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:9px}
+.sec-h .blue{color:var(--blue-light)}
+.sec-sub{font-size:13.5px;color:var(--text2);line-height:1.7;max-width:490px;margin-bottom:44px}
+
+/* CARDS */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+
+.pc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;transition:border-color .2s}
+.pc:hover{border-color:var(--border-blue)}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--border);transition:background .2s}
+.pc:hover::before{background:var(--blue)}
+.pc-icon{font-size:20px;margin-bottom:10px}
+.pc-title{font-size:13px;font-weight:700;margin-bottom:5px}
+.pc-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.pc-cost{font-size:10px;font-family:var(--mono);color:var(--amber);margin-top:9px;padding:3px 7px;background:rgba(245,158,11,0.08);border-radius:4px;display:inline-block}
+
+.fc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;gap:13px;transition:border-color .2s}
+.fc:hover{border-color:var(--border-blue)}
+.fc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.fc-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.fc-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px 13px;transition:all .2s}
+.rc:hover{border-color:var(--border-blue);transform:translateY(-2px)}
+.rc-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-bottom:9px}
+.rc-name{font-size:12.5px;font-weight:700;margin-bottom:2px}
+.rc-title{font-size:10px;color:var(--muted);margin-bottom:9px}
+.pr{font-size:10.5px;color:var(--muted);display:flex;align-items:center;gap:4px;padding:2px 0}
+.pr-y{color:var(--green);font-size:9px}.pr-n{color:var(--faint);font-size:9px}
+
+.how-g{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.hc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.hc-num{font-size:20px;font-weight:800;color:var(--blue-light);margin-bottom:7px;font-family:var(--mono)}
+.hc-title{font-size:12.5px;font-weight:700;margin-bottom:5px}
+.hc-desc{font-size:11.5px;color:var(--muted);line-height:1.6}
+
+.int-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.ic{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:8px 13px;font-size:12px;font-weight:500;transition:border-color .15s;color:var(--text2)}
+.ic:hover{border-color:var(--border-blue);color:var(--text)}
+
+/* DOC VIEWER CTA */
+.dv-cta{background:linear-gradient(135deg,var(--bg3),var(--surface));border:1px solid var(--border-blue);border-radius:var(--rl);padding:46px 44px;position:relative;overflow:hidden}
+.dv-cta::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(37,99,235,0.09),transparent 70%);pointer-events:none}
+.dv-stat{font-size:52px;font-weight:800;color:var(--blue-light);letter-spacing:-2px;line-height:1;margin:14px 0 4px}
+.dv-quote{font-size:14px;color:var(--text2);line-height:1.75;max-width:580px;font-style:italic;border-left:3px solid var(--blue);padding-left:16px;margin:18px 0}
+.dv-stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;max-width:680px;margin-top:26px}
+.dv-sc{border-radius:10px;padding:14px}
+
+/* PRIVATE */
+.priv-wrap{background:var(--surface);border:1px solid var(--border-blue);border-radius:var(--rl);padding:40px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.priv-title{font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.priv-sub{font-size:13px;color:var(--text2);line-height:1.7;max-width:520px}
+.btn-consult-big{font-size:14px;font-weight:700;padding:14px 28px;border-radius:var(--rs);border:none;background:var(--blue);color:#fff;transition:all .2s;white-space:nowrap}
+.btn-consult-big:hover{background:var(--blue-light);box-shadow:0 8px 32px rgba(37,99,235,0.35)}
+
+/* FOOTER */
+.footer{background:var(--bg2);border-top:1px solid var(--border);padding:34px 40px;text-align:center}
+.f-logo{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:8px}
+.f-sub{font-size:11.5px;color:var(--muted);margin-bottom:13px}
+.f-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.fl{font-size:11.5px;color:var(--muted);background:none;border:none;transition:color .15s}
+.fl:hover{color:var(--blue-light)}
+
+/* ══ LOGIN ══ */
+.ls{min-height:100vh;display:grid;grid-template-columns:1fr 460px}
+.ls-left{background:linear-gradient(155deg,#000 0%,#060812 60%,#080b18 100%);padding:56px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--border);position:relative;overflow:hidden}
+.ls-left::before{content:'';position:absolute;top:-100px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,0.06),transparent 70%);pointer-events:none}
+.ls-title{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1.2;margin:28px 0 12px;position:relative}
+.ls-sub{font-size:13px;color:var(--text2);line-height:1.75;max-width:310px;position:relative}
+.ls-feats{margin-top:28px;display:flex;flex-direction:column;gap:9px;position:relative}
+.ls-feat{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted)}
+.ls-feat-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ls-badges{display:flex;gap:7px;flex-wrap:wrap;position:relative}
+.lb{font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;border:1px solid}
+.lb-g{background:rgba(16,185,129,0.1);color:var(--green);border-color:rgba(16,185,129,0.2)}
+.lb-b{background:rgba(37,99,235,0.1);color:var(--blue-light);border-color:rgba(37,99,235,0.2)}
+.lb-gr{color:var(--muted);border-color:var(--border)}
+.ls-right{background:var(--bg2);padding:56px 48px;display:flex;flex-direction:column;justify-content:center}
+.lfw{max-width:340px;width:100%}
+.lf-title{font-size:21px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.lf-sub{font-size:12px;color:var(--muted);margin-bottom:26px;line-height:1.6}
+.fg{margin-bottom:13px}
+.fl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);display:block;margin-bottom:5px}
+.fi{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s}
+.fi:focus{border-color:var(--blue)}
+.fsel{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-size:13px;outline:none}
+.fta{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-size:13px;outline:none;resize:vertical;min-height:78px}
+.fta:focus{border-color:var(--blue)}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-prim{width:100%;font-size:13.5px;font-weight:700;padding:11px;border-radius:var(--rs);border:none;background:var(--blue);color:#fff;transition:all .15s;margin-bottom:8px}
+.btn-prim:hover{background:var(--blue-light)}
+.btn-sec{width:100%;font-size:13px;font-weight:500;padding:10px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .15s}
+.btn-sec:hover{border-color:var(--border-blue);color:var(--text)}
+.ghost-link{background:none;border:none;color:var(--blue-light);font-size:12px;cursor:pointer;font-family:var(--font)}
+.fdivider{display:flex;align-items:center;gap:10px;margin:13px 0;color:var(--muted);font-size:12px}
+.fdivider::before,.fdivider::after{content:'';flex:1;height:1px;background:var(--border)}
+.fnote{font-size:11px;color:var(--muted);text-align:center;line-height:1.6;margin-top:13px}
+
+/* OTP */
+.otp-row{display:flex;gap:8px;justify-content:center;margin:18px 0}
+.otp-b{width:42px;height:50px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rs);font-size:19px;font-weight:700;text-align:center;color:var(--text);outline:none;font-family:var(--mono)}
+.otp-b:focus{border-color:var(--blue)}
+.vs{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.vc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:38px;max-width:390px;width:92%;text-align:center}
+
+/* ══ ONBOARD ══ */
+.ob-wrap{display:flex;min-height:100vh}
+.ob-side{width:210px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:22px 10px;display:flex;flex-direction:column;gap:3px}
+.ob-logo{display:flex;align-items:center;gap:8px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.ob-step{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:var(--rs);font-size:12px;color:var(--muted)}
+.ob-step.act{background:rgba(37,99,235,0.1);color:var(--blue-light);border:1px solid rgba(37,99,235,0.2)}
+.ob-step.done{color:var(--green)}
+.ob-snum{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.ob-step.done .ob-snum{background:rgba(16,185,129,0.12);border-color:var(--green)}
+.ob-main{flex:1;padding:36px 50px;overflow-y:auto}
+.ob-prog{height:2px;background:var(--surface);border-radius:2px;margin-bottom:32px;overflow:hidden}
+.ob-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .4s}
+.ob-title{font-size:20px;font-weight:800;letter-spacing:-0.4px;margin-bottom:5px}
+.ob-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:24px}
+.ob-nav{display:flex;gap:9px;margin-top:26px}
+.ob-next{flex:1;font-size:13px;font-weight:700;padding:11px;border-radius:var(--rs);border:none;background:var(--blue);color:#fff;transition:all .15s}
+.ob-next:hover{background:var(--blue-light)}
+.ob-prev{font-size:12.5px;font-weight:500;padding:11px 18px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--muted)}
+.ob-prev:hover{color:var(--text);border-color:var(--text)}
+.intc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:11px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:border-color .15s}
+.intc:hover{border-color:var(--border-blue)}
+.intc.on{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.03)}
+.intc-ico{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.inv-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.inv-row .fi{margin:0}
+
+/* ══ APP ══ */
+.app-topbar{position:fixed;top:0;left:0;right:0;z-index:300;height:50px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:11px}
+.app-topbar-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.rs-wrap{display:flex;gap:2px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:2px}
+.rs-btn{font-size:10.5px;font-weight:500;padding:4px 8px;border-radius:5px;border:none;background:transparent;color:var(--muted);transition:all .12s;white-space:nowrap}
+.rs-btn.act{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
+.rs-btn:hover:not(.act){color:var(--text)}
+.app-exit{font-size:11px;padding:5px 11px;border-radius:5px;border:1px solid var(--border-blue);background:rgba(37,99,235,0.07);color:var(--blue-light)}
+.tb{font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:20px;border:1px solid}
+.tb-g{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.25);color:var(--green)}
+.tb-b{background:rgba(37,99,235,0.1);border-color:rgba(37,99,235,0.25);color:var(--blue-light)}
+.app-body{display:flex;padding-top:50px;min-height:100vh}
+.sidebar{width:196px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:9px 7px;display:flex;flex-direction:column;gap:2px;position:fixed;top:50px;bottom:0;overflow-y:auto}
+.sb-user{display:flex;align-items:center;gap:7px;padding:7px 9px 11px;border-bottom:1px solid var(--border);margin-bottom:3px}
+.sb-av{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;flex-shrink:0}
+.sb-uname{font-size:11px;font-weight:600}
+.sb-urole{font-size:9.5px;color:var(--muted)}
+.sb-sec{font-size:8.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:7px 9px 3px;margin-top:3px}
+.sb-item{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:var(--rs);font-size:11.5px;font-weight:500;color:var(--muted);transition:all .12s;border:1px solid transparent}
+.sb-item:hover{background:var(--surface);color:var(--text)}
+.sb-item.act{background:rgba(37,99,235,0.1);color:var(--blue-light);border-color:rgba(37,99,235,0.18)}
+.sb-icon{font-size:12px;width:14px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;font-size:9px;background:var(--blue);color:#fff;padding:1px 5px;border-radius:10px;font-weight:700}
+.sb-lock{opacity:.25;pointer-events:none}
+.sb-lock-ic{margin-left:auto;font-size:9px}
+.main{margin-left:196px;flex:1;padding:20px;min-height:calc(100vh - 50px)}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+.pt{font-size:21px;font-weight:800;letter-spacing:-0.4px}
+.ps{font-size:11.5px;color:var(--muted);margin-top:2px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.ct{font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:11px}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px}
+.sc{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:13px}
+.sv{font-size:23px;font-weight:800;letter-spacing:-0.5px;line-height:1}
+.sl{font-size:10.5px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.ss{font-size:10px;color:var(--muted);margin-top:3px}
+.sv-b{color:var(--blue-light)}.sv-g{color:var(--green)}.sv-a{color:var(--amber)}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.b{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;display:inline-block}
+.bg{background:rgba(16,185,129,0.12);color:var(--green)}
+.br{background:rgba(239,68,68,0.12);color:var(--red)}
+.ba{background:rgba(245,158,11,0.12);color:var(--amber)}
+.bb{background:rgba(37,99,235,0.12);color:var(--blue-light)}
+.bp{background:rgba(139,92,246,0.12);color:var(--purple)}
+.bgr{background:rgba(255,255,255,0.06);color:var(--muted)}
+.dot{width:5px;height:5px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dg{background:var(--green)}.da{background:var(--amber)}.db{background:var(--blue-light)}.dr{background:var(--red)}
+.jt{width:100%;border-collapse:collapse;font-size:11.5px}
+.jt th{text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:5px 9px;border-bottom:1px solid var(--border)}
+.jt td{padding:8px 9px;border-bottom:1px solid var(--border);vertical-align:middle}
+.jt tr:last-child td{border-bottom:none}
+.jt tr:hover td{background:rgba(255,255,255,0.012)}
+.pb-wrap{background:var(--surface3);border-radius:20px;height:4px;overflow:hidden}
+.pb-fill{height:100%;border-radius:20px}
+.gate{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
+.gp{background:rgba(16,185,129,0.15);color:var(--green)}.gf{background:rgba(239,68,68,0.15);color:var(--red)}.gw{background:rgba(245,158,11,0.15);color:var(--amber)}
+.av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;flex-shrink:0}
+.ai-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.ai-head{padding:11px 13px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.ai-msgs{padding:12px;display:flex;flex-direction:column;gap:9px;min-height:200px;max-height:340px;overflow-y:auto}
+.ai-msg{padding:9px 11px;border-radius:var(--rs);font-size:12px;line-height:1.55;max-width:92%}
+.ai-sys{background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.13)}
+.ai-usr{background:var(--surface2);border:1px solid var(--border);align-self:flex-end}
+.ai-input-area{padding:10px 13px;border-top:1px solid var(--border)}
+.ai-top-row{display:flex;gap:7px;margin-bottom:7px}
+.ai-inp{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:8px 10px;color:var(--text);font-size:12px;outline:none}
+.ai-inp:focus{border-color:var(--blue)}
+.ai-send{background:var(--blue);border:none;border-radius:var(--rs);padding:8px 13px;color:#fff;font-size:12px;font-weight:700;transition:background .15s}
+.ai-send:hover{background:var(--blue-light)}
+.ai-bottom-row{display:flex;align-items:center;gap:8px}
+.upload-btn{font-size:11px;font-weight:600;padding:5px 10px;border-radius:5px;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);display:flex;align-items:center;gap:5px;transition:all .12s}
+.upload-btn:hover{border-color:var(--blue);color:var(--blue-light)}
+.upload-note{font-size:10px;color:var(--muted)}
+.drop-zone{border:2px dashed var(--border2);border-radius:var(--rs);padding:12px;text-align:center;font-size:11.5px;color:var(--muted);margin-top:7px;transition:all .2s}
+.drop-zone.over{border-color:var(--blue);background:rgba(37,99,235,0.05);color:var(--blue-light)}
+.qa-wrap{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:5px}
+.qa-btn{font-size:10.5px;font-weight:500;padding:4px 9px;border-radius:5px;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);transition:all .12s}
+.qa-btn:hover{border-color:var(--blue);color:var(--blue-light)}
+.kb{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.kb-col{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px}
+.kb-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.kb-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:8px 10px;margin-bottom:5px;font-size:11px;line-height:1.4}
+.kb-meta{font-size:9.5px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:5px}
+.aud-row{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.aud-row:last-child{border-bottom:none}
+.aud-t{font-family:var(--mono);font-size:9px;color:var(--muted);flex-shrink:0;width:50px;margin-top:2px}
+.aud-tx{font-size:11px;line-height:1.4;flex:1}
+.aud-tag{font-size:8px;font-family:var(--mono);padding:1px 5px;border-radius:3px;flex-shrink:0}
+.at-l{background:rgba(16,185,129,0.1);color:var(--green)}.at-a{background:rgba(245,158,11,0.1);color:var(--amber)}.at-z{background:rgba(37,99,235,0.1);color:var(--blue-light)}
+.chat-wrap{display:grid;grid-template-columns:140px 1fr;gap:10px}
+.chat-sb{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px}
+.chat-ch{font-size:11.5px;padding:5px 6px;border-radius:5px;color:var(--muted);font-weight:500}
+.chat-ch.act{color:var(--blue-light);background:rgba(37,99,235,0.08)}
+.chat-bubble{font-size:11.5px;line-height:1.5;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:7px 9px;max-width:86%}
+.chat-name{font-size:9px;color:var(--muted);margin-bottom:2px;font-weight:700}
+.docs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.doc-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;cursor:pointer;transition:all .15s}
+.doc-card:hover{border-color:var(--border-blue);transform:translateY(-2px)}
+.inf-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11.5px}
+.inf-row:last-child{border-bottom:none}
+.partner-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px;display:flex;align-items:center;gap:10px;margin-bottom:7px;transition:border-color .15s}
+.partner-card:hover{border-color:var(--border-blue)}
+.partner-av{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.rec-box{background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.14);border-radius:var(--r);padding:18px;display:flex;justify-content:space-between;align-items:center;margin-top:11px}
+.af-group{margin-bottom:12px}
+.af-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.35px;color:var(--muted);display:block;margin-bottom:4px}
+.af-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:8px 10px;color:var(--text);font-size:12.5px;outline:none;transition:border-color .15s}
+.af-input:focus{border-color:var(--blue)}
+.af-select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:8px 10px;color:var(--text);font-size:12.5px;outline:none}
+.af-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.btn-ap{font-size:12.5px;font-weight:700;padding:9px 16px;border-radius:var(--rs);border:none;background:var(--blue);color:#fff;transition:all .15s}
+.btn-ap:hover{background:var(--blue-light)}
+.btn-ag{font-size:12px;font-weight:500;padding:8px 13px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--muted)}
+.btn-ag:hover{color:var(--text);border-color:var(--text)}
+/* doc viewer */
+.dv-scan{position:relative;overflow:hidden;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-bottom:10px}
+.dv-scan::after{content:'';position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue-light),transparent);animation:scan 2.5s linear infinite;top:0}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.dv-find{display:flex;align-items:flex-start;gap:9px;padding:9px;background:var(--surface2);border-radius:var(--rs);border:1px solid var(--border);margin-bottom:7px}
+.dv-find.crit{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.03)}
+.dv-find.key{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.03)}
+.int-g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<!-- LB LOGO SVG TEMPLATE (reusable inline) -->
+<svg style="display:none"><defs>
+<symbol id="lb-logo" viewBox="0 0 100 100" fill="none">
+<rect width="100" height="100" rx="18" fill="#0A0A0F"/>
+<path d="M28 20L28 72Q28 80 36 80L60 80" stroke="url(#g1)" stroke-width="9" stroke-linecap="round" fill="none"/>
+<circle cx="48" cy="38" r="7" fill="url(#g2)"/>
+<path d="M48 38L72 38Q82 38 82 48Q82 56 72 56L48 56" stroke="url(#g3)" stroke-width="8.5" stroke-linecap="round" fill="none"/>
+<circle cx="48" cy="68" r="7" fill="url(#g4)"/>
+<path d="M48 68L68 68Q78 68 78 60" stroke="url(#g5)" stroke-width="8" stroke-linecap="round" fill="none"/>
+<defs>
+<linearGradient id="g1" x1="28" y1="20" x2="60" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#60A5FA"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+<linearGradient id="g2" x1="41" y1="31" x2="55" y2="45" gradientUnits="userSpaceOnUse"><stop stop-color="#93C5FD"/><stop offset="1" stop-color="#3B82F6"/></linearGradient>
+<linearGradient id="g3" x1="48" y1="38" x2="82" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient>
+<linearGradient id="g4" x1="41" y1="61" x2="55" y2="75" gradientUnits="userSpaceOnUse"><stop stop-color="#93C5FD"/><stop offset="1" stop-color="#3B82F6"/></linearGradient>
+<linearGradient id="g5" x1="48" y1="68" x2="78" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient>
+</defs>
+</symbol>
+</defs></svg>
+
+<!-- ═══════════ SITE ═══════════ -->
+<div id="site">
+<nav class="site-nav">
+  <button class="logo-wrap" onclick="showSite()">
+    <svg width="30" height="30"><use href="#lb-logo"/></svg>
+    <span class="logo-text"><span>LB</span> JurisFlow</span>
+  </button>
+  <div class="nav-links">
+    <button class="nav-link" onclick="scrollSec('sec-platform')">Platform</button>
+    <button class="nav-link" onclick="scrollSec('sec-roles')">Roles</button>
+    <button class="nav-link" onclick="scrollSec('sec-tools')">Integrations</button>
+    <button class="nav-link" onclick="scrollSec('sec-docai')">Document AI</button>
+    <button class="nav-link" onclick="scrollSec('sec-private')">Private AI</button>
+  </div>
+  <div class="nav-right">
+    <button class="btn-signin" onclick="showLogin('login')">Sign In</button>
+    <button class="btn-start" onclick="showLogin('setup')">Start Firm Account</button>
+    <button class="btn-consult-nav" onclick="showLogin('consult')">Book Consultation</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div style="max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative;z-index:1">
+    <div>
+      <div class="h-eyebrow" style="opacity:0;animation:fadeUp .6s ease .1s forwards">Cloud platform now. Private AI when you want it.</div>
+      <h1 class="h-title" style="opacity:0;animation:fadeUp .6s ease .2s forwards">LB JurisFlow is the <span class="blue">work home</span> for legal teams.</h1>
+      <p class="h-sub" style="opacity:0;animation:fadeUp .6s ease .3s forwards">Law firms log in online and use CRM, case management, AI, documents, intake, and dashboards — one place, role-based, invite-only. Private AI available by consultation.</p>
+      <div class="h-btns" style="opacity:0;animation:fadeUp .6s ease .4s forwards">
+        <button class="btn-hp" onclick="showLogin('setup')">Start Firm Account</button>
+        <button class="btn-hg" onclick="launchApp()">See Platform Demo</button>
+        <button class="btn-hc" onclick="showLogin('consult')">Book Private AI</button>
+      </div>
+      <div class="h-pills" style="opacity:0;animation:fadeUp .6s ease .5s forwards">
+        <span class="pill">Invite-only firm accounts</span>
+        <span class="pill">5 role dashboards</span>
+        <span class="pill">Cloud now · Private when ready</span>
+        <span class="pill">No public signup</span>
+      </div>
+    </div>
+    <div style="opacity:0;animation:fadeUp .8s ease .5s forwards">
+      <div class="mockup-frame">
+        <div class="mock-bar">
+          <div class="md" style="background:#FF5F57"></div><div class="md" style="background:#FFBD2E;margin-left:4px"></div><div class="md" style="background:#28CA41;margin-left:4px"></div>
+          <div class="mock-url">legalinc.lbjurisflow.com · Secure</div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sb">
+            <div class="mock-sb-logo"><svg width="16" height="16"><use href="#lb-logo"/></svg>LB JurisFlow</div>
+            <div class="mnav on">◈ Dashboard</div>
+            <div class="mnav">◉ AI Assistant</div>
+            <div class="mnav">⊞ Case Work</div>
+            <div class="mnav">⊕ New Intake</div>
+            <div class="mnav">⊟ Lead CRM</div>
+            <div class="mnav">📁 Docs Library</div>
+            <div class="mnav">◎ Firm Chat</div>
+            <div class="mnav">◆ Audit Trail</div>
+          </div>
+          <div class="mock-main">
+            <div class="mstats">
+              <div class="mstat"><div class="mstat-v" style="color:#3B82F6">7</div><div class="mstat-l">Leads today</div></div>
+              <div class="mstat"><div class="mstat-v">42s</div><div class="mstat-l">Intake to CRM</div></div>
+              <div class="mstat"><div class="mstat-v" style="color:#10B981">0</div><div class="mstat-l">Missed calls</div></div>
+            </div>
+            <div class="mact">
+              <div class="mact-t">Live Activity</div>
+              <div class="mact-row"><div class="mact-icon">VA</div><div><div class="mact-text">TBI lead — Score 87 — LB Voice Agent</div><div style="font-size:9px;color:var(--muted)">After-hours capture · 2m ago</div></div></div>
+              <div class="mact-row"><div class="mact-icon">AI</div><div><div class="mact-text">Johnson records — 1,847 pages indexed</div><div style="font-size:9px;color:var(--muted)">Treatment gap found · 18m ago</div></div></div>
+              <div class="mact-row"><div class="mact-icon">✓</div><div><div class="mact-text">Martinez demand ready for review</div><div style="font-size:9px;color:var(--muted)">1h ago</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="si"><div class="si-num">$94K</div><div class="si-lbl">avg monthly revenue recovered per firm</div></div>
+  <div class="si"><div class="si-num">312h</div><div class="si-lbl">paralegal hours reclaimed per month</div></div>
+  <div class="si"><div class="si-num">42s</div><div class="si-lbl">intake to CRM — was 8–12 min manual</div></div>
+  <div class="si"><div class="si-num">0</div><div class="si-lbl">extra tools to learn — one window</div></div>
+</div>
+
+<!-- PLATFORM -->
+<div id="sec-platform"><div class="sec">
+  <div class="eyebrow">The platform</div>
+  <h2 class="sec-h">The <span class="blue">online legal work network.</span></h2>
+  <p class="sec-sub">Like early Facebook — firms access it through the browser. Get your workspace, invite staff, connect tools, and work from one place. Cloud now. Private infrastructure on request.</p>
+  <div class="g3">
+    <div class="pc"><div class="pc-icon">🏠</div><div class="pc-title">Hosted Firm Workspace</div><div class="pc-desc">Legal Inc. logs in at their own dedicated workspace. Invite-only — no one outside the firm can access it.</div></div>
+    <div class="pc"><div class="pc-icon">🔗</div><div class="pc-title">One Place For All Tools</div><div class="pc-desc">CRM, cases, fax, email, e-sign, AI, billing, docs — all inside one interface. No tab switching. No tool juggling.</div></div>
+    <div class="pc"><div class="pc-icon">🤖</div><div class="pc-title">AI Built In</div><div class="pc-desc">Cloud AI for demand drafting, records review, SOL checks, lead scoring, adjuster strategy — available to every role by default.</div></div>
+    <div class="pc"><div class="pc-icon">🔒</div><div class="pc-title">Invite-Only Access</div><div class="pc-desc">Managing partner invites team by work email. Each person gets role-based access automatically. No random public signup.</div></div>
+    <div class="pc"><div class="pc-icon">📊</div><div class="pc-title">Personal Dashboards</div><div class="pc-desc">Every team member pins widgets and customizes their view however they want — while sensitive data stays role-locked.</div></div>
+    <div class="pc"><div class="pc-icon">🏗️</div><div class="pc-title">Private AI on Request</div><div class="pc-desc">When a firm wants on-prem infrastructure or air-gapped systems — they book a consultation. We build it for them.</div></div>
+  </div>
+</div></div>
+
+<!-- PROBLEMS -->
+<div class="sec-dark"><div class="sec">
+  <div class="eyebrow">The six leaks</div>
+  <h2 class="sec-h">Your firm is <span class="blue">bleeding</span> every day.</h2>
+  <p class="sec-sub">Every PI and med mal firm faces the same revenue drains. LB JurisFlow addresses all of them.</p>
+  <div class="g3">
+    <div class="pc"><div class="pc-icon">📞</div><div class="pc-title">After-Hours Calls Lost</div><div class="pc-desc">Front door closes at 5 PM. Marketing runs 24/7. Every voicemail is a case calling the next firm. LB Voice Agent handles it.</div><div class="pc-cost">Est. loss: $288K–$432K/yr</div></div>
+    <div class="pc"><div class="pc-icon">📋</div><div class="pc-title">Records Bottleneck</div><div class="pc-desc">38 hours per med mal case requesting, following up, and organizing records. Strategy stalls waiting for one provider.</div><div class="pc-cost">1,520 paralegal hrs/yr</div></div>
+    <div class="pc"><div class="pc-icon">🔓</div><div class="pc-title">Privilege Leak</div><div class="pc-desc">Your paralegal uses public AI on client files because nobody gave them a secure alternative. Data already left the building.</div><div class="pc-cost">Risk: $400K–$1.2M per incident</div></div>
+    <div class="pc"><div class="pc-icon">⚖️</div><div class="pc-title">Attorney Doing Paralegal Work</div><div class="pc-desc">Paralegal queue backs up. $300/hr attorney spends 90 minutes organizing a file. $450 of attorney time on $52 of work.</div><div class="pc-cost">$93K–$156K misallocated/yr</div></div>
+    <div class="pc"><div class="pc-icon">📵</div><div class="pc-title">The Missed Call Tax</div><div class="pc-desc">Karen is on a call. Another comes in. Four minutes on hold. Potential TBI case hangs up and calls the next firm. Never returns.</div><div class="pc-cost">One missed TBI = $180K+</div></div>
+    <div class="pc"><div class="pc-icon">🗂️</div><div class="pc-title">Tools in Different Shelves</div><div class="pc-desc">CRM tab. Email tab. Fax open. DocuSign somewhere else. Nobody has the full picture. Time lost every single day.</div><div class="pc-cost">30–40 hrs/week lost</div></div>
+  </div>
+</div></div>
+
+<!-- FEATURES -->
+<div id="sec-tools"><div class="sec">
+  <div class="eyebrow">Features</div>
+  <h2 class="sec-h">Everything your firm does,<br><span class="blue">in one window.</span></h2>
+  <p class="sec-sub">The operating layer over your existing tools — connect Clio, Gmail, eFax, DocuSign, LawPay once. Your team stops switching tabs.</p>
+  <div class="g2" style="margin-bottom:28px">
+    <div class="fc"><div class="fc-icon" style="background:rgba(37,99,235,0.1)">📞</div><div><div class="fc-title">LB Voice Agent — After-Hours Capture</div><div class="fc-desc">Every call answered 24/7. LB Voice Agent scores leads, checks conflicts, and pushes to CRM in 42 seconds. Zero missed calls.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(16,185,129,0.1)">📋</div><div><div class="fc-title">Medical Records Engine</div><div class="fc-desc">AI reads and organizes your records. Treatment gaps surface automatically. Chronology builds itself. Hours returned to Maria.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(245,158,11,0.1)">⚡</div><div><div class="fc-title">Workflow Automation</div><div class="fc-desc">SOL alerts, client updates, demand triggers, milestone tracking, referral routing — fully automated. Nobody needs to touch it.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(139,92,246,0.1)">🛡</div><div><div class="fc-title">Privilege Audit Trail</div><div class="fc-desc">Every AI action, document access, and case update logged — who, when, which case. Full ABA compliance. No exceptions.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(20,184,166,0.1)">🔗</div><div><div class="fc-title">All Tools Connected</div><div class="fc-desc">Clio, Gmail, eFax, DocuSign, LawPay, MyCase — one login, one window. Every tool exposed by role, not by tab.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(239,68,68,0.1)">📁</div><div><div class="fc-title">Docs Library & E-Sign</div><div class="fc-desc">Editable firm template library. Demand letters, retainers, chronologies — edit, version, sign via DocuSign, all in one place.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(37,99,235,0.1)">◈</div><div><div class="fc-title">Personal Dashboards</div><div class="fc-desc">Every team member builds their own view — pin modules, add widgets, customize however they want. Role-locked underneath.</div></div></div>
+    <div class="fc"><div class="fc-icon" style="background:rgba(16,185,129,0.1)">⊗</div><div><div class="fc-title">Referral Portal</div><div class="fc-desc">Conflict-rejected leads automatically routed to approved referral partners. No attorney time. No lost relationship value.</div></div></div>
+  </div>
+  <div class="eyebrow" style="margin-bottom:14px">Connected tools</div>
+  <div class="int-row">
+    <div class="ic">🗂️ Clio</div><div class="ic">📧 Gmail / Outlook</div><div class="ic">📠 eFax · RingCentral</div><div class="ic">✍️ DocuSign</div><div class="ic">📋 MyCase</div><div class="ic">💰 LawPay</div><div class="ic">📁 NetDocuments</div><div class="ic">📞 LB Voice Agent</div><div class="ic">⚡ n8n Workflows</div><div class="ic">📊 Filevine</div>
+  </div>
+</div></div>
+
+<!-- ROLES -->
+<div id="sec-roles" class="sec-dark"><div class="sec">
+  <div class="eyebrow">Role-based access</div>
+  <h2 class="sec-h">Everyone sees <span class="blue">exactly</span> what their job needs.</h2>
+  <p class="sec-sub">Managing partner sets roles at invite. Each person lands on their own dashboard automatically. No configuration.</p>
+  <div class="g5">
+    <div class="rc"><div class="rc-av" style="background:rgba(139,92,246,0.15);color:#8B5CF6">RP</div><div class="rc-name">Managing Partner</div><div class="rc-title">Full firm control</div><div class="pr"><span class="pr-y">✓</span>All cases & analytics</div><div class="pr"><span class="pr-y">✓</span>Team management</div><div class="pr"><span class="pr-y">✓</span>Full audit trail</div><div class="pr"><span class="pr-y">✓</span>Referral portal</div><div class="pr"><span class="pr-y">✓</span>All integrations</div></div>
+    <div class="rc"><div class="rc-av" style="background:rgba(20,184,166,0.15);color:#14B8A6">ML</div><div class="rc-name">Senior Paralegal</div><div class="rc-title">Records & case work</div><div class="pr"><span class="pr-y">✓</span>Assigned cases</div><div class="pr"><span class="pr-y">✓</span>Medical records</div><div class="pr"><span class="pr-y">✓</span>AI assistant</div><div class="pr"><span class="pr-n">—</span>CRM / billing</div><div class="pr"><span class="pr-n">—</span>Analytics</div></div>
+    <div class="rc"><div class="rc-av" style="background:rgba(245,158,11,0.15);color:#F59E0B">KC</div><div class="rc-name">Intake Coordinator</div><div class="rc-title">Leads & intake</div><div class="pr"><span class="pr-y">✓</span>CRM & leads</div><div class="pr"><span class="pr-y">✓</span>New intake form</div><div class="pr"><span class="pr-y">✓</span>Lead scoring</div><div class="pr"><span class="pr-n">—</span>Case files</div><div class="pr"><span class="pr-n">—</span>Analytics</div></div>
+    <div class="rc"><div class="rc-av" style="background:rgba(37,99,235,0.15);color:#3B82F6">DT</div><div class="rc-name">Litigation Paralegal</div><div class="rc-title">Discovery & drafting</div><div class="pr"><span class="pr-y">✓</span>Demand drafting</div><div class="pr"><span class="pr-y">✓</span>Discovery docs</div><div class="pr"><span class="pr-y">✓</span>AI assistant</div><div class="pr"><span class="pr-n">—</span>Referral portal</div><div class="pr"><span class="pr-n">—</span>Analytics</div></div>
+    <div class="rc"><div class="rc-av" style="background:rgba(16,185,129,0.15);color:#10B981">SB</div><div class="rc-name">Associate Attorney</div><div class="rc-title">Cases & strategy</div><div class="pr"><span class="pr-y">✓</span>Own case files</div><div class="pr"><span class="pr-y">✓</span>AI assistant</div><div class="pr"><span class="pr-y">✓</span>Records review</div><div class="pr"><span class="pr-n">—</span>CRM / intake</div><div class="pr"><span class="pr-n">—</span>Referral portal</div></div>
+  </div>
+</div></div>
+
+<!-- HOW -->
+<div><div class="sec">
+  <div class="eyebrow">How access works</div>
+  <h2 class="sec-h">Invite-only. <span class="blue">Not open registration.</span></h2>
+  <p class="sec-sub" style="margin-bottom:28px">Admin sets up the workspace. Staff join by invite. No one can sign up without an invite from the managing partner.</p>
+  <div class="how-g">
+    <div class="hc"><div class="hc-num">01</div><div class="hc-title">Firm admin applies</div><div class="hc-desc">Managing partner enters firm name, email domain, bar number, state and practice area.</div></div>
+    <div class="hc"><div class="hc-num">02</div><div class="hc-title">Workspace created</div><div class="hc-desc">Legal Inc. gets its own online workspace at legalinc.lbjurisflow.com.</div></div>
+    <div class="hc"><div class="hc-num">03</div><div class="hc-title">Team invited</div><div class="hc-desc">Admin invites Maria, Karen, David, Sarah by work email — role set at invite time.</div></div>
+    <div class="hc"><div class="hc-num">04</div><div class="hc-title">Tools connected</div><div class="hc-desc">Admin connects Clio, Gmail, eFax, DocuSign once. Staff get access by role automatically.</div></div>
+    <div class="hc"><div class="hc-num">05</div><div class="hc-title">Private AI — optional</div><div class="hc-desc">If they want local or on-prem AI, they book a consultation. We build it for them.</div></div>
+  </div>
+</div></div>
+
+<!-- DOCUMENT AI -->
+<div id="sec-docai" class="sec-dark"><div class="sec">
+  <div class="dv-cta">
+    <div class="eyebrow">Document Intelligence</div>
+    <h2 style="font-size:28px;font-weight:800;letter-spacing:-0.5px;line-height:1.2;margin-bottom:8px;max-width:580px">Human eyes miss things after page 50.<br>AI doesn't get tired.</h2>
+    <div class="dv-stat">12s</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:10px">to surface critical evidence from thousands of pages</div>
+    <div class="dv-quote">That "missing page" was a single nursing note proving liability. One overlooked sentence could have changed the entire outcome of the case. LB JurisFlow scanned thousands of pages and surfaced the critical evidence in just 12 seconds. In high-stakes litigation, the biggest risk is not what you know — it's what you failed to find.</div>
+    <div style="font-size:16px;font-weight:700;margin:16px 0 20px">Don't leave millions to chance.</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px">
+      <button class="btn-hp" onclick="launchApp()">See Document AI in Action</button>
+      <button class="btn-hg" onclick="showLogin('consult')">Book Private AI Consultation</button>
+    </div>
+    <div class="dv-stat-cards">
+      <div class="dv-sc" style="background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.18)"><div style="font-size:20px;font-weight:800;color:var(--blue-light)">1,847</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Pages indexed in 4 minutes</div></div>
+      <div class="dv-sc" style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18)"><div style="font-size:20px;font-weight:800;color:var(--red)">14-day gap</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Treatment gap found automatically</div></div>
+      <div class="dv-sc" style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.18)"><div style="font-size:20px;font-weight:800;color:var(--green)">$2.1M</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Case value preserved by AI find</div></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- PRIVATE AI -->
+<div id="sec-private"><div class="sec">
+  <div class="eyebrow">Private AI Infrastructure</div>
+  <h2 class="sec-h">Book a consultation when<br><span class="blue">the firm wants more control.</span></h2>
+  <p class="sec-sub" style="margin-bottom:28px">Private infrastructure is not the default. The platform is cloud-based. If a managing partner wants on-prem servers, air-gapped systems, or private local AI — they consult with us and we build it specifically for their firm.</p>
+  <div class="priv-wrap">
+    <div>
+      <div class="priv-title">Private AI · On-Prem · Air-Gapped · Custom Workflows</div>
+      <div class="priv-sub">After consultation we assess the firm's size, case volume, practice areas, and data requirements — then build a private infrastructure that fits exactly. Pricing and features are determined per firm after the call. Nothing is listed publicly.</div>
+      <div style="margin-top:14px;display:flex;gap:7px;flex-wrap:wrap">
+        <span class="b bb">Local AI Models</span><span class="b bb">On-Prem Servers</span><span class="b bb">Air-Gapped Option</span><span class="b bb">Custom Workflows</span><span class="b bb">Firm-Tier Builds</span><span class="b bb">Zero Public Pricing</span>
+      </div>
+    </div>
+    <button class="btn-consult-big" onclick="showLogin('consult')">Book Consultation →</button>
+  </div>
+</div></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-logo"><svg width="20" height="20"><use href="#lb-logo"/></svg>LB JurisFlow</div>
+  <div class="f-sub">Sovereign Legal OS · A Division of LB Media · lbjurisflow.com</div>
+  <div class="f-links">
+    <button class="fl" onclick="showLogin('login')">Sign In</button>
+    <button class="fl" onclick="showLogin('setup')">Start Firm Account</button>
+    <button class="fl" onclick="scrollSec('sec-platform')">Platform</button>
+    <button class="fl" onclick="scrollSec('sec-private')">Private AI</button>
+    <button class="fl" onclick="showLogin('consult')">Book Consultation</button>
+    <span class="fl">Privacy Policy</span>
+    <span class="fl">Terms of Service</span>
+  </div>
+</footer>
+</div><!-- end #site -->
+
+<!-- ═══════════ LOGIN SCREEN ═══════════ -->
+<div id="login-screen">
+<!-- MAIN LOGIN -->
+<div id="ls-main" class="ls">
+  <div class="ls-left">
+    <div>
+      <button class="logo-wrap" onclick="showSite()">
+        <svg width="32" height="32"><use href="#lb-logo"/></svg>
+        <span class="logo-text"><span>LB</span> JurisFlow</span>
+      </button>
+      <div class="ls-title">Your firm's <span style="color:var(--blue-light)">legal work home.</span></div>
+      <div class="ls-sub">Invite-only. Your firm, nobody else. All your tools in one window, role-based access from day one.</div>
+      <div class="ls-feats">
+        <div class="ls-feat"><div class="ls-feat-dot" style="background:var(--green)"></div>Cloud platform — any browser, anywhere</div>
+        <div class="ls-feat"><div class="ls-feat-dot" style="background:var(--blue-light)"></div>Role-based access — everyone sees their work only</div>
+        <div class="ls-feat"><div class="ls-feat-dot" style="background:var(--amber)"></div>All your tools in one window — no tab switching</div>
+        <div class="ls-feat"><div class="ls-feat-dot" style="background:var(--purple)"></div>Private AI available after consultation</div>
+      </div>
+    </div>
+    <div class="ls-badges">
+      <span class="lb lb-g">● Cloud Live</span><span class="lb lb-b">Invite Only</span><span class="lb lb-gr">5 Roles</span>
+    </div>
+  </div>
+  <div class="ls-right">
+    <!-- SIGN IN PANEL -->
+    <div class="lfw" id="lp-signin">
+      <div class="lf-title">Sign in to your firm</div>
+      <div class="lf-sub">Use the email your managing partner invited you with. LB JurisFlow is invite-only — not a public platform.</div>
+      <div class="fg"><label class="fl-label">Work Email</label><input class="fi" type="email" value="maria@legalinc.com"></div>
+      <div class="fg"><label class="fl-label">Password</label><input class="fi" type="password" value="••••••••••"></div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="ghost-link">Forgot password?</button></div>
+      <button class="btn-prim" onclick="showVerify('staff')">Sign In →</button>
+      <div class="fdivider">or</div>
+      <button class="btn-sec" onclick="showPanel('lp-setup')">Set up a new firm account</button>
+      <div class="fnote">No invite? Ask your managing partner.<br>LB JurisFlow is invite-only.</div>
+    </div>
+    <!-- SETUP PANEL -->
+    <div class="lfw hidden" id="lp-setup">
+      <button onclick="showPanel('lp-signin')" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-bottom:18px;padding:0;display:flex;align-items:center;gap:4px">← Back to sign in</button>
+      <div class="lf-title">Set up your firm</div>
+      <div class="lf-sub">You'll be the firm admin. After setup, invite your team by work email with their roles assigned.</div>
+      <div class="fg"><label class="fl-label">Firm Name</label><input class="fi" placeholder="Johnson & Associates PI" value="Legal Inc."></div>
+      <div class="fg"><label class="fl-label">Bar / License Number</label><input class="fi" value="TX-2024-001234"></div>
+      <div class="fg"><label class="fl-label">Firm Email Domain</label><input class="fi" value="legalinc.com"></div>
+      <div class="fr2">
+        <div class="fg" style="margin:0"><label class="fl-label">State</label><select class="fsel"><option>Texas</option><option>California</option><option>Florida</option><option>New York</option></select></div>
+        <div class="fg" style="margin:0"><label class="fl-label">Practice</label><select class="fsel"><option>Personal Injury</option><option>Med Mal</option><option>Criminal</option></select></div>
+      </div>
+      <div class="fg" style="margin-top:10px"><label class="fl-label">Admin Password</label><input class="fi" type="password" placeholder="Min. 12 characters"></div>
+      <button class="btn-prim" onclick="showVerify('admin')">Create Firm Account →</button>
+    </div>
+    <!-- CONSULT PANEL -->
+    <div class="lfw hidden" id="lp-consult">
+      <button onclick="showSite()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-bottom:18px;padding:0;display:flex;align-items:center;gap:4px">← Back to site</button>
+      <div class="lf-title">Book Private AI Consultation</div>
+      <div class="lf-sub">Private infrastructure is built after consultation — not self-serve. Tell us about your firm and we'll be in touch within 24 hours.</div>
+      <div class="fg"><label class="fl-label">Firm Name</label><input class="fi" placeholder="Johnson & Associates PI"></div>
+      <div class="fg"><label class="fl-label">Managing Partner Email</label><input class="fi" type="email" placeholder="robert@legalinc.com"></div>
+      <div class="fg"><label class="fl-label">What do you need?</label><select class="fsel"><option>Private AI infrastructure</option><option>On-prem server deployment</option><option>Air-gapped workflow system</option><option>Custom firm automation</option><option>Full private LB JurisFlow build</option></select></div>
+      <div class="fg"><label class="fl-label">Firm Size</label><select class="fsel"><option>1–5 staff</option><option>6–20 staff</option><option>21–50 staff</option><option>50+ staff</option></select></div>
+      <div class="fg"><label class="fl-label">Notes</label><textarea class="fta" placeholder="Practice area, case volume, and what you're trying to solve..."></textarea></div>
+      <button class="btn-prim" onclick="alert('Consultation request received. We will contact you within 24 hours.')">Submit Consultation Request →</button>
+      <div class="fnote">No pricing listed. All private infrastructure scoped and quoted after consultation based on your firm's specific needs.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VERIFY -->
+<div id="ls-verify" class="vs hidden">
+  <div class="vc">
+    <div style="font-size:34px;margin-bottom:12px">🔐</div>
+    <div style="font-size:19px;font-weight:800;letter-spacing:-0.4px;margin-bottom:5px">Two-factor verification</div>
+    <div style="font-size:12.5px;color:var(--muted);line-height:1.6">Code sent to <strong style="color:var(--text)">maria@legalinc.com</strong></div>
+    <div class="otp-row">
+      <input class="otp-b" maxlength="1" value="4"><input class="otp-b" maxlength="1" value="2"><input class="otp-b" maxlength="1" value="7"><input class="otp-b" maxlength="1" value="8"><input class="otp-b" maxlength="1" value="1"><input class="otp-b" maxlength="1" value="3">
+    </div>
+    <button class="btn-prim" id="verify-btn">Verify & Enter →</button>
+    <div style="margin-top:10px;font-size:11.5px;color:var(--muted)">Didn't get it? <button class="ghost-link">Resend code</button></div>
+    <div style="margin-top:16px;background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.14);border-radius:7px;padding:10px;font-size:11px;color:var(--muted);line-height:1.6">🔒 2FA required for attorneys and partners. Staff can use optional 2FA.</div>
+  </div>
+</div>
+
+<!-- ONBOARD (admin-only, first-time firm setup) -->
+<div id="ls-onboard" class="hidden">
+<div class="ob-wrap">
+  <div class="ob-side">
+    <div class="ob-logo">
+      <svg width="24" height="24"><use href="#lb-logo"/></svg>
+      <span style="font-size:13px;font-weight:700">LB JurisFlow</span>
+    </div>
+    <div id="ob-steps-list"></div>
+  </div>
+  <div class="ob-main">
+    <div class="ob-prog"><div class="ob-fill" id="ob-fill" style="width:0%"></div></div>
+    <div id="ob-content"></div>
+  </div>
+</div>
+</div>
+</div><!-- end #login-screen -->
+
+<!-- ═══════════ APP SCREEN ═══════════ -->
+<div id="app-screen">
+<div class="app-topbar">
+  <button class="logo-wrap" onclick="goSite()">
+    <svg width="26" height="26"><use href="#lb-logo"/></svg>
+    <span class="logo-text" style="font-size:13.5px"><span>LB</span> JurisFlow</span>
+  </button>
+  <span class="tb tb-g">● Cloud Live</span>
+  <span class="tb tb-b">Legal Inc.</span>
+  <div class="app-topbar-r">
+    <div class="rs-wrap" id="rs-wrap">
+      <button class="rs-btn act" onclick="setRole('partner',this)">Partner</button>
+      <button class="rs-btn" onclick="setRole('paralegal',this)">Paralegal</button>
+      <button class="rs-btn" onclick="setRole('intake',this)">Intake</button>
+      <button class="rs-btn" onclick="setRole('litigation',this)">Litigation</button>
+      <button class="rs-btn" onclick="setRole('attorney',this)">Attorney</button>
+    </div>
+    <button class="app-exit" onclick="goSite()">← Back to site</button>
+  </div>
+</div>
+<div class="app-body">
+  <div class="sidebar" id="app-sidebar"></div>
+  <div class="main" id="app-main"></div>
+</div>
+</div><!-- end #app-screen -->
+<script>
+// ── STATE ──────────────────────────────────────────
+let currentRole='partner', currentPage='dashboard', obStep=0, verifyMode='staff';
+const OB_STEPS=['Firm profile','Invite team','Connect tools','Access rules','Go live'];
+const ROLES_LIST=['Managing Partner','Senior Attorney','Associate Attorney','Senior Paralegal','Litigation Paralegal','Intake Coordinator'];
+
+// ── ROUTING ────────────────────────────────────────
+function scrollSec(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+function showSite(){
+  document.getElementById('site').style.display='block';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='none';
+  window.scrollTo({top:0});
+}
+function showLogin(panel){
+  document.getElementById('site').style.display='none';
+  document.getElementById('login-screen').style.display='block';
+  document.getElementById('app-screen').style.display='none';
+  // show correct sub-panel
+  ['lp-signin','lp-setup','lp-consult'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.add('hidden');
+  });
+  // show main login form
+  document.getElementById('ls-main').style.display='grid';
+  document.getElementById('ls-verify').classList.add('hidden');
+  document.getElementById('ls-onboard').classList.add('hidden');
+  const map={login:'lp-signin',setup:'lp-setup',consult:'lp-consult'};
+  const targetId=map[panel]||'lp-signin';
+  document.getElementById(targetId)?.classList.remove('hidden');
+}
+function showPanel(id){
+  ['lp-signin','lp-setup','lp-consult'].forEach(p=>{
+    document.getElementById(p)?.classList.add('hidden');
+  });
+  document.getElementById(id)?.classList.remove('hidden');
+}
+function showVerify(mode){
+  verifyMode=mode;
+  document.getElementById('ls-main').style.display='none';
+  document.getElementById('ls-verify').classList.remove('hidden');
+  document.getElementById('ls-onboard').classList.add('hidden');
+  // wire button
+  document.getElementById('verify-btn').onclick=()=>{
+    if(verifyMode==='admin'){showOnboard();}
+    else{launchApp();}
+  };
+}
+function showOnboard(){
+  document.getElementById('ls-verify').classList.add('hidden');
+  document.getElementById('ls-onboard').classList.remove('hidden');
+  obStep=0; renderOB();
+}
+function launchApp(){
+  document.getElementById('site').style.display='none';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='block';
+  currentRole='partner'; currentPage='dashboard';
+  renderSidebar(); renderMain();
+}
+function goSite(){showSite();}
+
+// ── ONBOARDING (admin only) ─────────────────────────
+function renderOB(){
+  document.getElementById('ob-steps-list').innerHTML=OB_STEPS.map((s,i)=>{
+    const cls=i<obStep?'done':i===obStep?'act':'';
+    return `<div class="ob-step ${cls}"><div class="ob-snum">${i<obStep?'✓':i+1}</div>${s}</div>`;
+  }).join('');
+  document.getElementById('ob-fill').style.width=((obStep/(OB_STEPS.length-1))*100)+'%';
+  const pages=[obFirmProfile,obInviteTeam,obConnectTools,obAccessRules,obGoLive];
+  document.getElementById('ob-content').innerHTML=pages[obStep]();
+  document.getElementById('ob-next-btn')?.addEventListener('click',()=>{
+    if(obStep===OB_STEPS.length-1){launchApp();}
+    else{obStep++;renderOB();}
+  });
+  document.getElementById('ob-prev-btn')?.addEventListener('click',()=>{if(obStep>0){obStep--;renderOB();}});
+}
+const obNav=(lbl='Continue →',hidePrev=false)=>`<div class="ob-nav">
+  ${hidePrev?'':'<button id="ob-prev-btn" class="ob-prev">← Back</button>'}
+  <button id="ob-next-btn" class="ob-next">${lbl}</button>
+</div>`;
+
+function obFirmProfile(){return`
+<div class="ob-title">Firm profile</div>
+<div class="ob-sub">Stored on LB JurisFlow's secure cloud — never shared externally. Used to set up your firm's workspace.</div>
+<div class="fr2"><div class="fg"><label class="fl-label">Firm Name</label><input class="fi" value="Legal Inc."></div><div class="fg"><label class="fl-label">Bar Number</label><input class="fi" value="TX-2024-001234"></div></div>
+<div class="fg"><label class="fl-label">Firm Email Domain</label><input class="fi" value="legalinc.com"></div>
+<div class="fr2"><div class="fg"><label class="fl-label">State</label><select class="fsel"><option>Texas</option><option>California</option><option>Florida</option></select></div><div class="fg"><label class="fl-label">Practice Area</label><select class="fsel"><option>Personal Injury</option><option>Med Mal</option></select></div></div>
+<div class="fr2"><div class="fg"><label class="fl-label">Phone</label><input class="fi" value="(512) 555-0100"></div><div class="fg"><label class="fl-label">Team Size</label><select class="fsel"><option>1–5</option><option selected>6–20</option><option>21–50</option></select></div></div>
+<div style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:7px;padding:10px;font-size:11.5px;color:var(--muted);line-height:1.6">🔒 Your data is stored securely on LB JurisFlow's platform — not shared with third parties.</div>
+${obNav('Save & Continue →',true)}`;}
+
+function obInviteTeam(){
+  const people=[['James K.','james@legalinc.com','Managing Partner'],['Maria L.','maria@legalinc.com','Senior Paralegal'],['Karen C.','karen@legalinc.com','Intake Coordinator'],['David T.','david@legalinc.com','Litigation Paralegal'],['Sarah B.','sarah@legalinc.com','Associate Attorney']];
+  return`
+<div class="ob-title">Invite your team</div>
+<div class="ob-sub">Each person gets a one-time invite email. They set their own password and land on their role dashboard — no setup needed from them.</div>
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;font-size:11.5px">
+  <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px">Role Access Guide</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+    ${[['Managing Partner','Full access — all modules, analytics, team management'],['Associate Attorney','Own cases + AI + records — no CRM or referral'],['Senior Paralegal','Assigned cases + records + AI — no billing or analytics'],['Litigation Paralegal','Demand drafting + discovery + AI — no analytics'],['Intake Coordinator','CRM + intake only — no case files or analytics'],['Senior Attorney','All cases + AI + analytics — no CRM']].map(([r,d])=>`<div style="padding:6px;background:var(--surface);border-radius:6px"><div style="font-weight:700;font-size:11px;margin-bottom:2px">${r}</div><div style="color:var(--muted);font-size:10px">${d}</div></div>`).join('')}
+  </div>
+</div>
+<div id="inv-list">${people.map(([n,e,r])=>`<div class="inv-row"><input class="fi" style="max-width:110px" value="${n}"><input class="fi" type="email" value="${e}" style="flex:2"><select class="fsel" style="flex:1.5">${ROLES_LIST.map(ro=>`<option${ro===r?' selected':''}>${ro}</option>`).join('')}</select><button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:2px 5px;flex-shrink:0">×</button></div>`).join('')}</div>
+<button onclick="document.getElementById('inv-list').insertAdjacentHTML('beforeend','<div class=inv-row><input class=fi placeholder=Name style=max-width:110px><input class=fi type=email placeholder=email@firm.com style=flex:2><select class=fsel style=flex:1.5>${ROLES_LIST.map(r=>`<option>${r}</option>`).join('')}</select><button onclick=this.parentElement.remove() style=background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:2px 5px;flex-shrink:0>×</button></div>')" style="width:100%;padding:8px;border:1px dashed var(--border2);border-radius:7px;background:none;color:var(--muted);font-family:var(--font);font-size:12px;margin-top:5px">+ Add team member</button>
+${obNav('Send Invites & Continue →')}`;}
+
+function obConnectTools(){
+  const tools=[{i:'🗂️',n:'Clio',s:'Case management',c:true},{i:'📧',n:'Gmail / Outlook',s:'Email',c:true},{i:'📠',n:'eFax · RingCentral',s:'Fax',c:false},{i:'✍️',n:'DocuSign',s:'E-signatures',c:true},{i:'📋',n:'MyCase',s:'Case mgmt alt.',c:false},{i:'💰',n:'LawPay',s:'Billing',c:false},{i:'📞',n:'LB Voice Agent',s:'After-hours intake',c:true},{i:'⚡',n:'n8n Workflows',s:'Automation',c:true},{i:'🤖',n:'AI Assistant',s:'Cloud AI',c:true},{i:'🗃️',n:'PostgreSQL',s:'Secure DB',c:true}];
+  return`
+<div class="ob-title">Connect your tools</div>
+<div class="ob-sub">LB JurisFlow becomes your single window. Connect existing tools once — your team accesses them all here. Toggle to connect.</div>
+<div class="int-g2">${tools.map(t=>`<div class="intc ${t.c?'on':''}" onclick="this.classList.toggle('on')">
+  <div class="intc-ico" style="background:${t.c?'rgba(16,185,129,0.1)':'rgba(255,255,255,0.04)'}">${t.i}</div>
+  <div style="flex:1"><div style="font-size:12px;font-weight:600">${t.n}</div><div style="font-size:10.5px;color:var(--muted)">${t.s}</div></div>
+  <span class="b ${t.c?'bg':'bgr'}">${t.c?'Connected':'Connect'}</span>
+</div>`).join('')}</div>
+<div style="margin-top:11px;font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px;line-height:1.6">💡 Each tool connects via API key stored securely in your workspace. Data flows directly from the tool to your LB JurisFlow workspace.</div>
+${obNav('Save & Continue →')}`;}
+
+function obAccessRules(){return`
+<div class="ob-title">Access rules</div>
+<div class="ob-sub">These defaults follow standard PI firm security. You can adjust anytime from the admin panel.</div>
+${[{r:'Managing Partner',c:'#8B5CF6',items:['Full access to all modules','See all cases and financials','Add / remove team members','Change access rules for any role']},{r:'Associate Attorney',c:'#10B981',items:['Own cases only — no firm-wide list','AI Assistant available','No CRM, billing, or referral portal','Privilege audit logged on all actions']},{r:'Senior Paralegal',c:'#14B8A6',items:['Assigned cases only','Request and index medical records','AI for record analysis and chronology','No billing, analytics, or referral data']},{r:'Intake Coordinator',c:'#F59E0B',items:['Full CRM and intake access','No active case files','No analytics or billing','Can route rejected leads to referral partners']}].map(({r,c,items})=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px"><div style="font-size:12.5px;font-weight:700;color:${c};margin-bottom:7px">${r}</div>${items.map(i=>`<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);padding:2px 0"><span style="color:var(--green);font-size:9px">●</span>${i}</div>`).join('')}</div>`).join('')}
+${obNav('Confirm & Go Live →')}`;}
+
+function obGoLive(){return`
+<div style="text-align:center;padding:10px 0 18px">
+  <div style="font-size:40px;margin-bottom:12px">🚀</div>
+  <div class="ob-title">LB JurisFlow is live.</div>
+  <div style="font-size:13px;color:var(--muted);max-width:400px;margin:0 auto 22px;line-height:1.7">Legal Inc. is now on the platform. Your team will receive invite emails shortly.</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:18px">
+  ${[['01','Team gets invites','Each clicks a one-time link, sets their password, and lands on their role dashboard.'],['02','They see their work','Karen sees CRM. Maria sees records. Robert sees everything. No configuration needed.'],['03','All tools in one window','Clio, eFax, DocuSign, Gmail — all inside LB JurisFlow. One login.']].map(([n,t,d])=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:13px"><div style="font-size:18px;font-weight:800;color:var(--blue-light);margin-bottom:5px;font-family:var(--mono)">${n}</div><div style="font-size:12px;font-weight:700;margin-bottom:3px">${t}</div><div style="font-size:11px;color:var(--muted);line-height:1.5">${d}</div></div>`).join('')}
+</div>
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:13px">
+  <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px">Invites Sent — Legal Inc.</div>
+  <table class="jt"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead><tbody>
+    ${[['RP','James K.','james@legalinc.com','Managing Partner','#8B5CF6'],['ML','Maria L.','maria@legalinc.com','Senior Paralegal','#14B8A6'],['KC','Karen C.','karen@legalinc.com','Intake Coordinator','#F59E0B'],['DT','David T.','david@legalinc.com','Litigation Paralegal','#3B82F6'],['SB','Sarah B.','sarah@legalinc.com','Associate Attorney','#10B981']].map(([init,n,e,r,c])=>`<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="background:${c}22;color:${c}">${init}</div><span style="font-weight:600">${n}</span></div></td><td style="color:var(--muted);font-size:11px">${e}</td><td><span class="b bgr">${r}</span></td><td><span class="b ba">Invite sent ✉</span></td></tr>`).join('')}
+  </tbody></table>
+</div>
+<div style="display:flex;gap:12px;align-items:center;background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.14);border-radius:8px;padding:13px 16px">
+  ${[['5','Team members'],['6','Tools connected'],['Live','AI status']].map(([v,l])=>`<div style="text-align:center;padding:0 12px;border-right:1px solid var(--border)"><div style="font-size:18px;font-weight:800;color:${v==='Live'?'var(--green)':'var(--text)'}">${v}</div><div style="font-size:9.5px;color:var(--muted)">${l}</div></div>`).join('')}
+  <div style="text-align:center;padding:0 12px"><div style="font-size:18px;font-weight:800;color:var(--green)">$0</div><div style="font-size:9.5px;color:var(--muted)">Setup cost</div></div>
+  <button id="ob-next-btn" class="ob-next" style="margin-left:auto;max-width:180px">Open Dashboard →</button>
+</div>`;}
+
+// ── APP SIDEBAR / ROLE DATA ─────────────────────────
+const ROLE_DATA={
+  partner:{name:'Robert P.',title:'Managing Partner',color:'#8B5CF6',initials:'RP',
+    nav:[{s:'Overview'},{id:'dashboard',icon:'◈',label:'Dashboard'},{id:'analytics',icon:'◑',label:'Analytics'},
+      {s:'Operations'},{id:'cases',icon:'⊞',label:'All Cases',badge:'23'},{id:'tasks',icon:'◫',label:'Tasks'},
+      {s:'Intelligence'},{id:'ai',icon:'◉',label:'AI Assistant'},{id:'docviewer',icon:'🔍',label:'Document AI'},
+      {id:'audit',icon:'◆',label:'Audit Trail'},
+      {s:'Firm'},{id:'referral',icon:'⊗',label:'Referral Portal'},{id:'chat',icon:'◎',label:'Firm Chat',badge:'4'},
+      {id:'docs',icon:'📁',label:'Docs Library'},{id:'integrations',icon:'🔗',label:'Integrations'}]},
+  paralegal:{name:'Maria L.',title:'Senior Paralegal',color:'#14B8A6',initials:'ML',
+    nav:[{s:'My Work'},{id:'dashboard',icon:'◈',label:'My Dashboard'},{id:'cases',icon:'⊞',label:'My Cases',badge:'12'},
+      {id:'tasks',icon:'◫',label:'Tasks',badge:'5'},{s:'Records'},{id:'records',icon:'📋',label:'Medical Records',badge:'3'},
+      {id:'docviewer',icon:'🔍',label:'Document AI'},
+      {s:'Intelligence'},{id:'ai',icon:'◉',label:'AI Assistant'},
+      {s:'Comms'},{id:'chat',icon:'◎',label:'Firm Chat',badge:'2'},{id:'docs',icon:'📁',label:'Docs Library'},{id:'audit',icon:'◆',label:'Audit Trail'},
+      {s:'Restricted'},{id:'analytics',icon:'◑',label:'Analytics',locked:true},{id:'referral',icon:'⊗',label:'Referral Portal',locked:true}]},
+  intake:{name:'Karen C.',title:'Intake Coordinator',color:'#F59E0B',initials:'KC',
+    nav:[{s:'Intake'},{id:'dashboard',icon:'◈',label:'Live Dashboard'},{id:'intake_form',icon:'⊕',label:'New Intake'},
+      {id:'crm',icon:'⊟',label:'Lead CRM',badge:'7'},{s:'Activity'},{id:'tasks',icon:'◫',label:'Follow-ups',badge:'2'},
+      {id:'chat',icon:'◎',label:'Firm Chat',badge:'1'},{id:'docs',icon:'📁',label:'Docs Library'},
+      {s:'Restricted'},{id:'analytics',icon:'◑',label:'Analytics',locked:true},{id:'audit',icon:'◆',label:'Audit Trail',locked:true}]},
+  litigation:{name:'David T.',title:'Litigation Paralegal',color:'#3B82F6',initials:'DT',
+    nav:[{s:'My Work'},{id:'dashboard',icon:'◈',label:'My Dashboard'},{id:'cases',icon:'⊞',label:'Active Cases',badge:'8'},
+      {id:'tasks',icon:'◫',label:'Tasks',badge:'5'},{s:'Drafting'},{id:'ai',icon:'◉',label:'AI Assistant'},
+      {id:'docviewer',icon:'🔍',label:'Document AI'},
+      {s:'Discovery'},{id:'records',icon:'📋',label:'Discovery Docs'},{id:'audit',icon:'◆',label:'Audit Trail'},
+      {id:'docs',icon:'📁',label:'Docs Library'},{s:'Comms'},{id:'chat',icon:'◎',label:'Firm Chat',badge:'3'},
+      {s:'Restricted'},{id:'referral',icon:'⊗',label:'Referral Portal',locked:true},{id:'analytics',icon:'◑',label:'Analytics',locked:true}]},
+  attorney:{name:'Sarah B.',title:'Associate Attorney',color:'#10B981',initials:'SB',
+    nav:[{s:'My Cases'},{id:'dashboard',icon:'◈',label:'Dashboard'},{id:'cases',icon:'⊞',label:'Case Files',badge:'6'},
+      {id:'tasks',icon:'◫',label:'Tasks',badge:'3'},{s:'Work'},{id:'records',icon:'📋',label:'Records Review'},
+      {id:'ai',icon:'◉',label:'AI Assistant'},{id:'docviewer',icon:'🔍',label:'Document AI'},
+      {id:'docs',icon:'📁',label:'Docs Library'},
+      {s:'Firm'},{id:'chat',icon:'◎',label:'Firm Chat',badge:'2'},{id:'audit',icon:'◆',label:'Privilege Audit'},
+      {s:'Restricted'},{id:'crm',icon:'⊟',label:'Lead CRM',locked:true},{id:'referral',icon:'⊗',label:'Referral Portal',locked:true}]}
+};
+
+function setRole(role,btn){
+  currentRole=role; currentPage='dashboard';
+  document.querySelectorAll('.rs-btn').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  renderSidebar(); renderMain();
+}
+function setPage(page,locked){
+  if(locked)return;
+  currentPage=page; renderSidebar(); renderMain();
+}
+function renderSidebar(){
+  const r=ROLE_DATA[currentRole];
+  let h=`<div class="sb-user"><div class="sb-av" style="background:${r.color}22;color:${r.color}">${r.initials}</div><div><div class="sb-uname">${r.name}</div><div class="sb-urole">${r.title}</div></div></div>`;
+  r.nav.forEach(item=>{
+    if(item.s){h+=`<div class="sb-sec">${item.s}</div>`;return;}
+    const act=currentPage===item.id?'act':'';
+    const lk=item.locked?'sb-lock':'';
+    const badge=item.badge?`<span class="sb-badge">${item.badge}</span>`:'';
+    const li=item.locked?`<span class="sb-lock-ic">🔒</span>`:'';
+    h+=`<div class="sb-item ${act} ${lk}" onclick="setPage('${item.id}',${!!item.locked})"><span class="sb-icon">${item.icon}</span>${item.label}${badge}${li}</div>`;
+  });
+  document.getElementById('app-sidebar').innerHTML=h;
+}
+function renderMain(){
+  const pages={
+    partner:{dashboard:pgDash,analytics:pgAnalytics,cases:pgCases,tasks:pgTasks,ai:pgAI,docviewer:pgDocViewer,audit:pgAudit,referral:pgReferral,chat:pgChat,docs:pgDocs,integrations:pgIntegrations},
+    paralegal:{dashboard:pgPlDash,cases:pgCases,tasks:pgTasks,records:pgRecords,docviewer:pgDocViewer,ai:pgAI,chat:pgChat,docs:pgDocs,audit:pgAudit},
+    intake:{dashboard:pgIntDash,intake_form:pgIntakeForm,crm:pgIntDash,tasks:pgTasks,chat:pgChat,docs:pgDocs},
+    litigation:{dashboard:pgLitDash,cases:pgCases,tasks:pgTasks,ai:pgAI,docviewer:pgDocViewer,records:pgRecords,audit:pgAudit,docs:pgDocs,chat:pgChat},
+    attorney:{dashboard:pgAttDash,cases:pgCases,tasks:pgTasks,records:pgRecords,ai:pgAI,docviewer:pgDocViewer,chat:pgChat,audit:pgAudit,docs:pgDocs}
+  };
+  const fn=pages[currentRole]?.[currentPage]||pgDash;
+  document.getElementById('app-main').innerHTML=fn();
+  attachAI(); attachUpload();
+}
+// ── PAGE RENDERS ───────────────────────────────────
+function pgDash(){return`
+<div class="ph"><div><div class="pt">Dashboard Overview</div><div class="ps">Jun 09, 2026 · Legal Inc. · All systems live</div></div><div style="display:flex;gap:6px"><span class="b bg">● All Live</span><span class="b bb">Cloud</span></div></div>
+<div class="sg">
+  <div class="sc"><div class="sl">Leads today</div><div class="sv sv-b">7</div><div class="ss">↑ 3 high priority</div></div>
+  <div class="sc"><div class="sl">Gate pass rate</div><div class="sv sv-g">94%</div><div class="ss">↑ Week avg</div></div>
+  <div class="sc"><div class="sl">Intake to CRM</div><div class="sv">42s</div><div class="ss">LB Voice Agent</div></div>
+  <div class="sc"><div class="sl">Missed calls</div><div class="sv sv-g">0</div><div class="ss">Always covered</div></div>
+</div>
+<div class="tc">
+  <div class="card card-pad"><div class="ct">5 Leaks Fixed</div>
+    ${[['📞','LB Voice Agent','0 missed calls today'],['📋','Medical Records AI','89 pages indexed'],['🔒','Privilege Audit','All actions logged'],['🔗','Referral Auto-intake','3 partners active'],['⚡','Demand in 90s','2 demands ready']].map(([i,t,s])=>`<div class="inf-row"><span style="font-size:15px">${i}</span><div style="flex:1"><div style="font-size:12px;font-weight:600">${t}</div><div style="font-size:10.5px;color:var(--muted)">${s}</div></div><span class="b bg">FIXED</span></div>`).join('')}
+  </div>
+  <div class="card card-pad"><div class="ct">Live Activity</div>
+    ${[['VA','rgba(37,99,235,.12)','TBI lead captured — Score 87 — LB Voice Agent','2m ago · After-hours'],['AI','rgba(16,185,129,.1)','Johnson records indexed — 1,847 pages','18m ago · Records AI'],['✓','rgba(20,184,166,.1)','Demand draft ready — Martinez','1h ago · Workflow'],['✗','rgba(239,68,68,.1)','Lead rejected — Conflict → referral portal','2h ago · Gate 1']].map(([ic,bg,t,m])=>`<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--border)"><div style="width:26px;height:26px;border-radius:6px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${ic}</div><div><div style="font-size:11.5px">${t}</div><div style="font-size:10px;color:var(--muted)">${m}</div></div></div>`).join('')}
+  </div>
+</div>
+<div class="rec-box">
+  <div><div style="font-size:10px;color:var(--muted);margin-bottom:3px">Recovery This Month</div><div style="font-size:28px;font-weight:800;color:var(--green)">$94K</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Est. revenue recovered</div></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center">
+    ${[['312','Hours reclaimed'],['43','After-hrs leads'],['89','Files indexed'],['$0','Setup cost']].map(([v,l])=>`<div><div style="font-size:19px;font-weight:800;color:${v==='$0'?'var(--green)':'var(--text)'}">${v}</div><div style="font-size:9.5px;color:var(--muted)">${l}</div></div>`).join('')}
+  </div>
+</div>`;}
+
+function pgPlDash(){return`
+<div class="ph"><div><div class="pt">My Dashboard</div><div class="ps">Maria L. · Senior Paralegal · 12 active cases</div></div></div>
+<div class="sg">
+  <div class="sc"><div class="sl">Active cases</div><div class="sv">12</div><div class="ss">4 need records</div></div>
+  <div class="sc"><div class="sl">Records pending</div><div class="sv sv-a">6</div><div class="ss">Provider delays</div></div>
+  <div class="sc"><div class="sl">AI indexed today</div><div class="sv sv-g">89</div><div class="ss">Pages processed</div></div>
+  <div class="sc"><div class="sl">Hours saved</div><div class="sv sv-b">210</div><div class="ss">This month</div></div>
+</div>
+<div class="tc">
+  <div class="card card-pad"><div class="ct">Cases Needing Action</div>
+    <table class="jt"><thead><tr><th>Case</th><th>Missing</th><th>Wait</th><th>Status</th></tr></thead><tbody>
+      ${[['Johnson, T.','Neuro + Ortho','6 wks','br'],['Davis, M.','Surgery notes','4 wks','ba'],['Martinez, R.','—','—','bg'],['Williams, A.','Spine MRI','2 wks','ba']].map(([n,m,w,cls])=>`<tr><td style="font-weight:600">${n}</td><td style="font-size:11px;color:var(--muted)">${m}</td><td style="font-size:10.5px;color:var(--muted)">${w}</td><td><span class="b ${cls}">${cls==='br'?'Blocked':cls==='ba'?'Delayed':'Ready'}</span></td></tr>`).join('')}
+    </tbody></table>
+  </div>
+  <div class="card card-pad"><div class="ct">AI Indexing Queue</div>
+    ${[['Johnson records','1,847 pages','72%','#3B82F6'],['Davis surgery notes','892 pages','100%','#10B981'],['Santos slip-fall','214 pages','100%','#10B981']].map(([n,p,pct,c])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px"><span style="font-weight:600">${n}</span><span style="color:var(--muted)">${p}</span></div><div class="pb-wrap"><div class="pb-fill" style="width:${pct};background:${c}"></div></div><div style="font-size:9.5px;color:var(--muted);margin-top:2px">${pct} complete</div></div>`).join('')}
+  </div>
+</div>`;}
+
+function pgIntDash(){return`
+<div class="ph"><div><div class="pt">Live Intake Dashboard</div><div class="ps">Karen C. · All channels live · LB Voice Agent covers after-hours</div></div><button class="btn-ap" onclick="setPage('intake_form',false);renderSidebar();renderMain()">+ New Intake</button></div>
+<div class="sg">
+  <div class="sc"><div class="sl">Leads today</div><div class="sv sv-b">7</div><div class="ss">3 high priority</div></div>
+  <div class="sc"><div class="sl">After-hours (AI)</div><div class="sv sv-g">43</div><div class="ss">LB Voice Agent</div></div>
+  <div class="sc"><div class="sl">Avg CRM entry</div><div class="sv">42s</div><div class="ss">Was 8–12 min</div></div>
+  <div class="sc"><div class="sl">Missed calls</div><div class="sv sv-g">0</div><div class="ss">AI handles 24/7</div></div>
+</div>
+<div class="card card-pad"><div class="ct">Today's Leads — Live</div>
+  <table class="jt"><thead><tr><th>Name</th><th>Type</th><th>Score</th><th>G1</th><th>G2</th><th>G3</th><th>Stage</th><th>Source</th></tr></thead><tbody>
+    ${[['Martinez, R.','Trucking','92','✓','✓','✓','Demand','Web form'],['Johnson, T.','TBI','87','✓','✓','✓','Records','LB Voice Agent'],['Williams, A.','Car Acc.','74','✓','✓','!','Settlement','Referral'],['Davis, M.','Med Mal','91','✓','✓','✓','Litigation','Email'],['Santos, L.','Slip & Fall','58','✓','✓','—','Intake','Web form'],['Thompson, C.','Car Acc.','82','✗','—','—','Conflict','LB Voice Agent']].map(([n,t,sc,g1,g2,g3,stage,src])=>{
+      const c=parseInt(sc)>=85?'var(--green)':parseInt(sc)>=70?'var(--amber)':'var(--red)';
+      const gc=g=>g==='✓'?'gp':g==='✗'?'gf':'gw';
+      return `<tr><td style="font-weight:600">${n}</td><td style="font-size:10.5px;color:var(--muted)">${t}</td><td style="font-weight:800;color:${c}">${sc}</td><td><div class="gate ${gc(g1)}">${g1}</div></td><td><div class="gate ${gc(g2)}">${g2}</div></td><td><div class="gate ${gc(g3)}">${g3}</div></td><td><span class="b bgr">${stage}</span></td><td style="font-size:10.5px;color:var(--muted)">${src}</td></tr>`;}).join('')}
+  </tbody></table>
+</div>`;}
+
+function pgLitDash(){return`
+<div class="ph"><div><div class="pt">Litigation Dashboard</div><div class="ps">David T. · 8 active files · 2 demands ready</div></div></div>
+<div class="sg">
+  <div class="sc"><div class="sl">Active files</div><div class="sv">8</div></div>
+  <div class="sc"><div class="sl">Demands ready</div><div class="sv sv-g">2</div><div class="ss">AI drafted · 90s</div></div>
+  <div class="sc"><div class="sl">SOL alerts</div><div class="sv sv-a">1</div><div class="ss">Davis — 36 days</div></div>
+  <div class="sc"><div class="sl">Client calls</div><div class="sv sv-g">0</div><div class="ss">AI sent updates</div></div>
+</div>
+<div class="card card-pad" style="margin-bottom:11px;border-color:rgba(245,158,11,.22);background:rgba(245,158,11,.02)">
+  <div class="ct">⚠ SOL Alert</div>
+  <div style="font-size:13px;font-weight:700;margin-bottom:3px">Davis, M. — Med Mal</div>
+  <div style="font-size:11.5px;color:var(--muted)">Statute of limitations: <span style="color:var(--amber);font-weight:700">36 days remaining</span> · Auto-alert sent to James K.</div>
+</div>
+<div class="card card-pad"><div class="ct">Demand Letter Queue</div>
+  <table class="jt"><thead><tr><th>Case</th><th>Type</th><th>Status</th><th>Generated</th><th>Action</th></tr></thead><tbody>
+    <tr><td style="font-weight:600">Martinez, R.</td><td><span class="b bb">Trucking</span></td><td><span class="b ba">Review needed</span></td><td style="font-size:10.5px;color:var(--muted)">Today · 90s · AI</td><td><button class="btn-ap" style="font-size:10.5px;padding:3px 9px">Review</button></td></tr>
+    <tr><td style="font-weight:600">Williams, A.</td><td><span class="b bgr">Car Acc.</span></td><td><span class="b ba">Review needed</span></td><td style="font-size:10.5px;color:var(--muted)">Yesterday · 87s · AI</td><td><button class="btn-ap" style="font-size:10.5px;padding:3px 9px">Review</button></td></tr>
+    <tr><td style="font-weight:600">Davis, M.</td><td><span class="b br">Med Mal</span></td><td><span class="b bgr">Pending records</span></td><td style="font-size:10.5px;color:var(--muted)">Blocked</td><td><span style="font-size:10.5px;color:var(--muted)">—</span></td></tr>
+  </tbody></table>
+</div>`;}
+
+function pgAttDash(){return`
+<div class="ph"><div><div class="pt">My Cases</div><div class="ps">Sarah B. · Associate Attorney · 6 active matters</div></div></div>
+<div class="sg">
+  <div class="sc"><div class="sl">Active matters</div><div class="sv">6</div></div>
+  <div class="sc"><div class="sl">Files ready</div><div class="sv sv-g">4</div><div class="ss">AI organized</div></div>
+  <div class="sc"><div class="sl">Dep. this week</div><div class="sv">2</div><div class="ss">Files prepped</div></div>
+  <div class="sc"><div class="sl">Admin hrs saved</div><div class="sv sv-b">6h</div><div class="ss">This week · AI</div></div>
+</div>
+<div class="card card-pad"><div class="ct">Case Files</div>
+  <table class="jt"><thead><tr><th>Client</th><th>Type</th><th>Stage</th><th>File Status</th><th>Next Action</th></tr></thead><tbody>
+    ${[['Johnson, T.','TBI','Records','AI indexing 72%','Wait for records'],['Santos, L.','Slip & Fall','Intake','Complete','Initial consult Mon'],['Miller, D.','Car Acc.','Demand','AI drafted','Review demand'],['Park, Y.','TBI','Deposition','Ready','Dep. prep Tue 2pm'],['Brown, K.','Med Mal','Discovery','In progress','Request records'],['Chen, L.','Wrongful Death','Settlement','Complete','Review offer']].map(([n,t,s,f,a])=>`<tr><td style="font-weight:600">${n}</td><td><span class="b bgr">${t}</span></td><td><span class="b bb">${s}</span></td><td style="font-size:11px;color:var(--muted)">${f}</td><td style="font-size:11.5px">${a}</td></tr>`).join('')}
+  </tbody></table>
+</div>`;}
+
+function pgAnalytics(){return`
+<div class="ph"><div><div class="pt">Recovery Reports</div><div class="ps">This month · $94K recovered</div></div></div>
+<div class="sg">
+  <div class="sc"><div class="sl">Est. recovered</div><div class="sv sv-g">$94K</div></div>
+  <div class="sc"><div class="sl">Hours reclaimed</div><div class="sv sv-b">312</div></div>
+  <div class="sc"><div class="sl">After-hours leads</div><div class="sv">43</div></div>
+  <div class="sc"><div class="sl">Setup cost</div><div class="sv sv-g">$0</div></div>
+</div>
+<div class="tc">
+  <div class="card card-pad"><div class="ct">Lead Sources</div>
+    ${[['LB Voice Agent','43','#3B82F6','70%'],['Web Form','31','#14B8A6','50%'],['Referral Partners','23','#10B981','37%'],['Email Intake','13','#F59E0B','21%']].map(([s,c,col,w])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px"><span>${s}</span><span style="color:var(--muted)">${c} leads</span></div><div class="pb-wrap"><div class="pb-fill" style="width:${w};background:${col}"></div></div></div>`).join('')}
+  </div>
+  <div class="card card-pad"><div class="ct">Time Recovered</div>
+    ${[['Medical indexing','210h','#3B82F6','68%'],['Demand drafting','62h','#14B8A6','20%'],['Intake processing','40h','#10B981','13%']].map(([t,h,c,w])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px"><span>${t}</span><span style="font-weight:700">${h}</span></div><div class="pb-wrap"><div class="pb-fill" style="width:${w};background:${c}"></div></div></div>`).join('')}
+    <div style="font-size:10.5px;color:var(--muted);margin-top:7px">312 total hours recovered this month</div>
+  </div>
+</div>
+<div class="card card-pad"><div class="ct">Annual Cost Impact</div>
+  <table class="jt"><thead><tr><th>Problem</th><th>Annual Impact</th><th>Status</th></tr></thead><tbody>
+    <tr><td>After-hours lead loss</td><td style="color:var(--green);font-weight:700">$288K–$432K recovered</td><td><span class="b bg">Fixed</span></td></tr>
+    <tr><td>Manual record indexing (1,520 hrs/yr)</td><td style="color:var(--green);font-weight:700">$53,200 labor saved</td><td><span class="b bg">Fixed</span></td></tr>
+    <tr><td>Unauthorized AI / privilege risk</td><td style="color:var(--green);font-weight:700">$400K–$1.2M risk eliminated</td><td><span class="b bg">Fixed</span></td></tr>
+    <tr><td>Attorney doing paralegal work</td><td style="color:var(--green);font-weight:700">$93K–$156K freed</td><td><span class="b bg">Fixed</span></td></tr>
+  </tbody></table>
+</div>`;}
+
+function pgCases(){return`
+<div class="ph"><div><div class="pt">Case Files</div><div class="ps">All active matters</div></div>
+  <input class="af-input" placeholder="Search cases..." style="width:200px">
+</div>
+<div class="card card-pad">
+  <table class="jt"><thead><tr><th>Client</th><th>Type</th><th>Priority</th><th>Score</th><th>Gates</th><th>Stage</th><th>Attorney</th><th>Date</th></tr></thead><tbody>
+    ${[['Martinez, R.','Trucking · TBI','HIGH','92','✓✓✓','Demand','James K.','05/07'],['Johnson, T.','TBI · Car Acc.','HIGH','87','✓✓✓','Records','Sarah B.','05/08'],['Williams, A.','Car Acc.','MED','74','✓✓!','Settlement','James K.','05/01'],['Davis, M.','Med Mal','HIGH','91','✓✓✓','Litigation','Chris P.','04/28'],['Santos, L.','Slip & Fall','LOW','58','✓✓—','Intake','Sarah B.','05/09'],['Thompson, C.','Rejected','REJ','82','✗——','Conflict','—','05/09']].map(([n,t,p,sc,g,stage,a,d])=>{
+      const pc=p==='HIGH'?'br':p==='MED'?'ba':'bgr';
+      const c=parseInt(sc)>=85?'var(--green)':parseInt(sc)>=70?'var(--amber)':'var(--red)';
+      return `<tr><td style="font-weight:600">${n}</td><td style="font-size:10.5px;color:var(--muted)">${t}</td><td><span class="b ${pc}">${p}</span></td><td style="font-weight:800;color:${c}">${sc}</td><td style="font-family:var(--mono);font-size:11.5px;letter-spacing:2px">${g}</td><td><span class="b bb">${stage}</span></td><td style="font-size:10.5px">${a}</td><td style="font-size:10px;font-family:var(--mono);color:var(--muted)">${d}</td></tr>`;}).join('')}
+  </tbody></table>
+</div>`;}
+
+function pgTasks(){return`
+<div class="ph"><div><div class="pt">Task Board</div></div><button class="btn-ap">+ Add Task</button></div>
+<div class="kb">
+  <div class="kb-col"><div class="kb-head"><div class="dot da"></div>To Do<span class="sb-badge" style="margin-left:auto;background:var(--amber);color:#000">4</span></div>
+    ${[['Review Martinez demand before sending','Urgent · James K.','da'],['Request MRI records — Johnson','Records · Sarah B.','db'],['Call Davis — deposition prep','Litigation · Chris P.','db'],['Update referral partner — 3 pending','Referral · Sarah B.','dg']].map(([t,s,dc])=>`<div class="kb-card">${t}<div class="kb-meta"><div class="dot ${dc}"></div>${s}</div></div>`).join('')}
+  </div>
+  <div class="kb-col"><div class="kb-head"><div class="dot db"></div>In Progress<span class="sb-badge" style="margin-left:auto">3</span></div>
+    ${[['AI indexing Johnson records — 72%','AI · System','db'],['Williams settlement follow-up','Settlement · James K.','da'],['Intake call scheduled — Santos 2PM','Intake · Sarah B.','dg']].map(([t,s,dc])=>`<div class="kb-card">${t}<div class="kb-meta"><div class="dot ${dc}"></div>${s}</div></div>`).join('')}
+  </div>
+  <div class="kb-col"><div class="kb-head"><div class="dot dg"></div>Done Today<span class="sb-badge" style="margin-left:auto;background:rgba(16,185,129,.2);color:var(--green)">5</span></div>
+    ${[['TBI lead qualified — Score 87','Completed · System'],['Thompson conflict rejected','Completed · Gate 1'],['89 records indexed this week','Completed · AI'],['Martinez demand drafted','Completed · Workflow'],['SOL alert sent — Davis','Completed · System']].map(([t,s])=>`<div class="kb-card" style="opacity:.65">${t}<div class="kb-meta"><div class="dot dg"></div>${s}</div></div>`).join('')}
+  </div>
+</div>`;}
+
+function pgAI(){
+  const qa={partner:['📝 Draft Demand','📋 Review Records','⏰ SOL Check','🎯 Score Lead','🛡 Adjuster Strategy','⊞ Case Summary','✉ Client Update'],paralegal:['📋 Index Records','⊞ Chronology','📝 Record Request','⏰ Follow-up Draft','🔍 Find Gap'],litigation:['📝 Draft Demand','🛡 Adjuster Strategy','⊞ Case Summary','✉ Client Update','⏰ SOL Check'],attorney:['⊞ Case Summary','📋 Review Records','📝 Draft Motion','🔒 Privilege Audit','🛡 Trial Prep'],intake:['🎯 Score Lead','⏰ SOL Check','✉ Qualify Lead','📞 Voice Log']};
+  return`
+<div class="ph"><div><div class="pt">AI Assistant</div><div class="ps">Cloud AI · Privilege-logged · File upload supported</div></div><span class="b bg">● Online</span></div>
+<div class="ai-wrap">
+  <div class="ai-head">
+    <svg width="20" height="20"><use href="#lb-logo"/></svg>
+    <div><div style="font-size:12.5px;font-weight:700">LB JurisFlow AI</div><div style="font-size:10px;color:var(--muted)">Cloud AI · All actions privilege-logged</div></div>
+    <span class="b bg" style="margin-left:auto">● Live</span>
+  </div>
+  <div class="qa-wrap">
+    <div style="font-size:9.5px;color:var(--muted);width:100%;margin-bottom:4px">Quick Actions</div>
+    ${(qa[currentRole]||qa.partner).map(a=>`<button class="qa-btn" onclick="prefillAI('${a}')">${a}</button>`).join('')}
+  </div>
+  <div class="ai-msgs" id="ai-msgs">
+    <div class="ai-msg ai-sys">
+      <div style="font-size:9.5px;color:var(--blue-light);display:flex;align-items:center;gap:5px;margin-bottom:6px"><svg width="12" height="12"><use href="#lb-logo"/></svg>LB JurisFlow AI · CLOUD · PRIVILEGE LOGGED</div>
+      I'm your firm's AI assistant. I can draft demands, analyze medical records, check SOL deadlines, score leads, build chronologies, advise on adjuster strategy, and review documents.<br><br>
+      <strong>Upload files directly</strong> — PDFs, medical records, case documents — using the upload button below. I'll analyze them and surface critical findings instantly.
+    </div>
+  </div>
+  <div class="ai-input-area">
+    <div class="ai-top-row">
+      <input class="ai-inp" id="ai-input" placeholder="Ask anything or upload a document...">
+      <button class="ai-send" id="ai-send-btn">Send</button>
+    </div>
+    <div class="ai-bottom-row">
+      <button class="upload-btn" onclick="document.getElementById('file-upload-input').click()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload Document
+      </button>
+      <input type="file" id="file-upload-input" style="display:none" multiple accept=".pdf,.doc,.docx,.txt,.png,.jpg" onchange="handleFileUpload(this)">
+      <button class="upload-btn" onclick="toggleDropZone()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+        Drag & Drop
+      </button>
+      <span class="upload-note">PDF, DOC, TXT, Images · Max 50MB</span>
+    </div>
+    <div class="drop-zone hidden" id="drop-zone" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="handleDrop(event)">
+      Drop files here to upload and analyze
+    </div>
+    <div id="uploaded-files-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+  </div>
+</div>`;}
+
+function prefillAI(txt){
+  const inp=document.getElementById('ai-input');
+  if(inp){inp.value=txt;inp.focus();}
+}
+function toggleDropZone(){
+  const dz=document.getElementById('drop-zone');
+  if(dz) dz.classList.toggle('hidden');
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('drop-zone')?.classList.remove('over');
+  processFiles(e.dataTransfer.files);
+}
+function handleFileUpload(input){
+  processFiles(input.files);
+}
+function processFiles(files){
+  const list=document.getElementById('uploaded-files-list');
+  const msgs=document.getElementById('ai-msgs');
+  if(!list||!msgs) return;
+  Array.from(files).forEach(file=>{
+    // show file chip
+    const chip=document.createElement('div');
+    chip.style.cssText='display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border-blue);border-radius:5px;padding:4px 8px;font-size:11px;color:var(--blue-light)';
+    chip.innerHTML=`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>${file.name}`;
+    list.appendChild(chip);
+    // AI response
+    msgs.innerHTML+=`<div class="ai-msg ai-usr">📎 Uploaded: <strong>${file.name}</strong> (${(file.size/1024).toFixed(0)}KB)</div>`;
+    setTimeout(()=>{
+      const ext=file.name.split('.').pop().toLowerCase();
+      let resp='';
+      if(ext==='pdf'||file.name.toLowerCase().includes('record')||file.name.toLowerCase().includes('medical')){
+        resp=`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px;display:flex;align-items:center;gap:4px"><svg width="11" height="11"><use href="#lb-logo"/></svg> Analyzing: <strong>${file.name}</strong></div>
+Document processed. Here's what I found:<br><br>
+<strong style="color:var(--red)">⚠ Critical Gap Detected</strong> — Treatment gap April 3–17 (14 days). No provider notes during this window. This needs to be addressed before demand.<br><br>
+<strong style="color:var(--green)">✓ Key Findings</strong><br>
+• MRI confirms C3-C4 herniation (April 22)<br>
+• ER records confirm LOC at scene<br>
+• 8-month consistent treatment narrative<br>
+• Causation chain intact<br><br>
+<strong>Recommended Action:</strong> Request missing neurologist notes (Dr. Chen) with urgency flag. Do not draft demand until gap is explained. Want me to draft the records request now?`;
+      } else if(ext==='docx'||file.name.toLowerCase().includes('demand')||file.name.toLowerCase().includes('letter')){
+        resp=`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px;display:flex;align-items:center;gap:4px"><svg width="11" height="11"><use href="#lb-logo"/></svg> Reviewing document: <strong>${file.name}</strong></div>
+Document reviewed. Analysis:<br><br>
+<strong>Structure:</strong> Well-organized. Opening liability facts are strong.<br>
+<strong style="color:var(--amber)">⚠ Suggestion:</strong> Damages section undersells future medical costs. Consider adding present value calculation for ongoing treatment.<br>
+<strong style="color:var(--green)">✓ Strong:</strong> Liability narrative is clear. Policy limits demand is properly stated.<br><br>
+Want me to redraft the damages section with enhanced future cost projections?`;
+      } else {
+        resp=`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px;display:flex;align-items:center;gap:4px"><svg width="11" height="11"><use href="#lb-logo"/></svg> Processed: <strong>${file.name}</strong></div>
+File received and analyzed. I've reviewed the contents and logged this action to your privilege audit trail.<br><br>What would you like me to do with this document? I can summarize, extract key facts, flag issues, or use it as context for drafting.`;
+      }
+      msgs.innerHTML+=`<div class="ai-msg ai-sys">${resp}</div>`;
+      msgs.scrollTop=msgs.scrollHeight;
+    },900);
+  });
+}
+function attachUpload(){
+  const dz=document.getElementById('drop-zone');
+  if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over');});dz.addEventListener('dragleave',()=>dz.classList.remove('over'));dz.addEventListener('drop',handleDrop);}
+}
+function attachAI(){
+  const btn=document.getElementById('ai-send-btn');
+  const inp=document.getElementById('ai-input');
+  if(!btn||!inp) return;
+  const REPLIES={
+    draft:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>Generating demand for <strong>Martinez v. Westfield Trucking</strong>...<br><br>Draft ready. Key points: TBI with LOC, 6-week treatment gap flagged, adjuster history shows low-ball offers on this policy. Recommend opening at <strong>3.2× specials</strong>. Sending to review queue.<br><br>Want me to also generate an adjuster strategy memo?`,
+    record:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>Indexing Johnson records — 1,847 pages in 4m 12s.<br><br><strong style="color:var(--red)">⚠ Critical:</strong> Treatment gap April 3–17 — neurologist notes missing.<br><strong style="color:var(--green)">✓</strong> MRI April 22 confirms C3-C4 herniation.<br><strong style="color:var(--green)">✓</strong> ER records confirm LOC at scene.<br><br>Chronology built. Gap flagged for strategy. Shall I draft the records request for Dr. Chen?`,
+    sol:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>SOL Check — <strong>Davis, M. (Med Mal): 36 days remaining</strong> (TX 2-year statute). URGENT.<br><br>Recommended action: File suit by July 12 or request 30-day extension. Auto-alert dispatched to James K. and Chris P. Want me to prepare the filing checklist?`,
+    score:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>Lead scoring <strong>Martinez, R. — Score: 92/100</strong><br><br>High-value indicators: commercial truck + TBI with imaging + liability clear (rear-end at 55mph) + State Farm insurer (cooperative history).<br>Gate 1: Clear · Gate 2: Pass · Gate 3: Pass<br><br>Recommend immediate engagement. Shall I assign to James K. and trigger intake workflow?`,
+    adjuster:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>Adjuster strategy — <strong>Williams, A.: State Farm</strong><br><br>Adjuster history: 3 prior PI claims from this office settled at avg <strong>2.1× specials</strong>. Pattern: low first offer, escalates quickly when supervisor involved.<br><br>Strategy: Do not accept first offer. Counter at <strong>3.5×</strong>. Request supervisor escalation after second rejection. Set 30-day deadline.`,
+    summary:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>Case summary — <strong>Martinez v. Westfield Trucking · TBI</strong><br><br>Liability: Clear (dashcam + police report). Damages: $180K specials, 8-month treatment, lost wages $42K documented. Demand range: $580K–$720K. Trial value: $1.1M–$1.4M.<br><br>Next steps: Finalize demand letter, confirm treatment narrative complete, prepare adjuster strategy.`,
+    default:`<div style="font-size:9.5px;color:var(--blue-light);margin-bottom:6px">⚖ LB JurisFlow AI · CLOUD</div>Processing your request. Action logged to privilege audit trail.<br><br>Ready to assist with next step. You can also <strong>upload a document</strong> using the button below and I'll analyze it immediately.`
+  };
+  const send=()=>{
+    const v=inp.value.trim();
+    if(!v) return;
+    const msgs=document.getElementById('ai-msgs');
+    if(!msgs) return;
+    msgs.innerHTML+=`<div class="ai-msg ai-usr">${v}</div>`;
+    inp.value='';
+    setTimeout(()=>{
+      const key=Object.keys(REPLIES).find(k=>v.toLowerCase().includes(k))||'default';
+      msgs.innerHTML+=`<div class="ai-msg ai-sys">${REPLIES[key]}</div>`;
+      msgs.scrollTop=msgs.scrollHeight;
+    },650);
+  };
+  btn.onclick=send;
+  inp.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}};
+}
+
+function pgDocViewer(){return`
+<div class="ph"><div><div class="pt">Document AI</div><div class="ps">Upload records · AI scans every page · Critical findings surfaced instantly</div></div></div>
+<div style="background:rgba(37,99,235,0.04);border:1px solid rgba(37,99,235,0.18);border-radius:var(--r);padding:20px;margin-bottom:14px">
+  <div style="font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:10px">Document Intelligence</div>
+  <div style="font-size:22px;font-weight:800;letter-spacing:-0.5px;line-height:1.2;margin-bottom:8px;max-width:560px">Human eyes miss things after page 50.<br>AI doesn't get tired.</div>
+  <div style="font-size:13px;color:var(--text2);line-height:1.7;max-width:540px;font-style:italic;border-left:3px solid var(--blue);padding-left:14px;margin-bottom:16px">That "missing page" was a single nursing note proving liability. One overlooked sentence could have changed the entire outcome. LB JurisFlow scanned thousands of pages and surfaced the critical evidence in just 12 seconds. Don't leave millions to chance.</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px;max-width:560px">
+    <div style="background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.18);border-radius:9px;padding:12px"><div style="font-size:19px;font-weight:800;color:var(--blue-light)">12s</div><div style="font-size:10.5px;color:var(--muted);margin-top:2px">To surface critical evidence</div></div>
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);border-radius:9px;padding:12px"><div style="font-size:19px;font-weight:800;color:var(--red)">14-day gap</div><div style="font-size:10.5px;color:var(--muted);margin-top:2px">Found automatically</div></div>
+    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.18);border-radius:9px;padding:12px"><div style="font-size:19px;font-weight:800;color:var(--green)">$2.1M</div><div style="font-size:10.5px;color:var(--muted);margin-top:2px">Case value preserved</div></div>
+  </div>
+</div>
+<div class="tc">
+  <div class="card card-pad">
+    <div class="ct">Upload & Scan Documents</div>
+    <div id="dv-drop" style="border:2px dashed var(--border2);border-radius:var(--r);padding:28px;text-align:center;margin-bottom:12px;transition:all .2s;cursor:pointer" onclick="document.getElementById('dv-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)';this.style.background='rgba(37,99,235,0.05)'" ondragleave="this.style.borderColor='';this.style.background=''" ondrop="event.preventDefault();this.style.borderColor='';this.style.background='';dvProcessFiles(event.dataTransfer.files)">
+      <div style="font-size:28px;margin-bottom:8px">📄</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px">Drop records here or click to upload</div>
+      <div style="font-size:11.5px;color:var(--muted)">PDF, DOC, TXT, Images · Max 50MB · Multiple files supported</div>
+    </div>
+    <input type="file" id="dv-file-input" style="display:none" multiple accept=".pdf,.doc,.docx,.txt,.png,.jpg" onchange="dvProcessFiles(this.files)">
+    <div id="dv-files" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+    <button class="btn-ap" onclick="dvRunScan()" style="width:100%">🔍 Scan All Documents for Critical Findings</button>
+  </div>
+  <div class="card card-pad">
+    <div class="ct">Currently Indexed — Johnson, T.</div>
+    <div class="dv-scan"><div style="font-size:11px;font-weight:600;margin-bottom:4px">Scanning in progress — Johnson Medical Records</div><div style="font-size:10.5px;color:var(--muted)">1,847 pages · Page 1,329 of 1,847</div></div>
+    ${[{t:'Treatment gap April 3–17 — Neurologist notes missing',cls:'crit',badge:'br',tag:'Critical'},
+       {t:'MRI April 22: C3-C4 herniation confirmed on imaging',cls:'key',badge:'bg',tag:'Key finding'},
+       {t:'ER records confirm LOC documented at scene',cls:'key',badge:'bg',tag:'Liability'},
+       {t:'Single nursing note p.847: "Patient reported no prior neck injury"',cls:'key',badge:'bb',tag:'Evidence'},
+       {t:'Consistent 8-month treatment narrative intact',cls:'key',badge:'bg',tag:'Damages'}].map(({t,cls,badge,tag})=>`<div class="dv-find ${cls}"><span class="b ${badge}">${tag}</span><span style="font-size:11.5px">${t}</span></div>`).join('')}
+  </div>
+</div>`;}
+
+function dvProcessFiles(files){
+  const list=document.getElementById('dv-files');
+  if(!list) return;
+  Array.from(files).forEach(f=>{
+    const chip=document.createElement('div');
+    chip.style.cssText='display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border-blue);border-radius:5px;padding:4px 9px;font-size:11px;color:var(--blue-light)';
+    chip.innerHTML=`📄 ${f.name}`;
+    list.appendChild(chip);
+  });
+}
+function dvRunScan(){
+  const area=document.getElementById('dv-drop');
+  if(area){area.innerHTML='<div style="font-size:13px;font-weight:600;color:var(--blue-light)">🔍 Scanning documents... AI analyzing every page</div><div style="font-size:11px;color:var(--muted);margin-top:4px">This usually takes 10–60 seconds depending on page count.</div>';setTimeout(()=>{area.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--green)">✓ Scan complete — Critical findings surfaced above</div><div style="font-size:11px;color:var(--muted);margin-top:4px">All findings logged to privilege audit trail.</div>';},2500);}
+}
+
+function pgRecords(){return`
+<div class="ph"><div><div class="pt">Medical Records</div><div class="ps">AI-indexed · Critical findings surfaced automatically</div></div><button class="btn-ap">+ Request Records</button></div>
+<div class="card card-pad" style="margin-bottom:11px"><div class="ct">Active Record Requests</div>
+  <table class="jt"><thead><tr><th>Case</th><th>Provider</th><th>Requested</th><th>Status</th><th>Pages</th><th>AI Index</th></tr></thead><tbody>
+    ${[['Johnson, T.','Dr. Chen — Neurology','May 1','Pending — Wk 6','—','Waiting'],['Johnson, T.','Austin Ortho','May 8','Received','892','100% ✓'],['Davis, M.','St. David\'s Surgery','Apr 20','Received','1,201','100% ✓'],['Davis, M.','Dr. Patel — Anesthesia','May 3','Pending — Wk 4','—','Waiting'],['Williams, A.','Spine & Sport Rehab','May 10','Received','214','100% ✓']].map(([n,p,r,s,pg,idx])=>`<tr><td style="font-weight:600">${n}</td><td style="font-size:11px">${p}</td><td style="font-size:10px;font-family:var(--mono);color:var(--muted)">${r}</td><td><span class="b ${s.includes('Pending')?'ba':'bg'}">${s.includes('Pending')?'Pending':'Received'}</span></td><td style="font-size:11px;color:var(--muted)">${pg}</td><td style="font-size:11px;color:${idx==='Waiting'?'var(--amber)':'var(--green)'}">${idx}</td></tr>`).join('')}
+  </tbody></table>
+</div>
+<div class="card card-pad"><div class="ct">AI Findings — Johnson, T.</div>
+  ${[['Treatment gap April 3–17 — Neurologist notes missing','br','Critical'],['MRI April 22: C3-C4 herniation confirmed','bg','Key finding'],['ER records confirm LOC at scene','bg','Liability support'],['Consistent treatment — 8 months documented','bg','Damages']].map(([t,badge,tag])=>`<div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--surface2);border-radius:var(--rs);border:1px solid var(--border);margin-bottom:6px"><span class="b ${badge}">${tag}</span><span style="font-size:11.5px">${t}</span></div>`).join('')}
+</div>`;}
+
+function pgChat(){return`
+<div class="ph"><div><div class="pt">Firm Chat</div><div class="ps">Internal only · Encrypted</div></div></div>
+<div class="chat-wrap">
+  <div class="chat-sb">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:7px">Channels</div>
+    ${['#general','#case-alerts','#intake-live','#ai-outputs'].map((c,i)=>`<div class="chat-ch ${i===1?'act':''}">${c}</div>`).join('')}
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:10px 0 7px">Direct</div>
+    ${['Sarah B.','Chris P.','James K.'].map(n=>`<div class="chat-ch" style="display:flex;align-items:center;gap:5px"><div class="dot dg" style="width:5px;height:5px"></div>${n}</div>`).join('')}
+  </div>
+  <div class="ai-wrap">
+    <div class="ai-head"><span style="font-size:13px;font-weight:700">#case-alerts</span><span class="b bb" style="margin-left:auto">Internal Only</span></div>
+    <div class="chat-msgs" style="padding:12px;display:flex;flex-direction:column;gap:8px;min-height:200px">
+      ${[['SB','Sarah B.','#10B981','Johnson deposition file ready. AI indexed all 1,847 pages — treatment gap flagged April.'],['JK','James K.','#8B5CF6','What does the gap cover exactly?'],['AI','LB AI','#3B82F6','Gap: April 3–17. Neurologist notes missing. MRI April 22 shows C3-C4 herniation. Recommend Dr. Chen records with urgency flag. [PRIVILEGE LOGGED]'],['SB','Sarah B.','#10B981','On it. SOL alert for Davis went out automatically this morning. 36 days.'],['JK','James K.','#8B5CF6','Filing date locked. David — where are we on Martinez demand?'],['DT','David T.','#3B82F6','AI drafted in 90s. In your review queue. Opening at 3.2× specials per AI adjuster analysis.']].map(([init,name,c,msg])=>`<div style="display:flex;gap:7px;align-items:flex-start"><div class="av" style="background:${c}22;color:${c}">${init}</div><div><div class="chat-name">${name}</div><div class="chat-bubble">${msg}</div></div></div>`).join('')}
+    </div>
+    <div class="ai-input-row"><input class="ai-inp" placeholder="Message #case-alerts..."><button class="ai-send">Send</button></div>
+  </div>
+</div>`;}
+
+function pgDocs(){return`
+<div class="ph"><div><div class="pt">Docs Library</div><div class="ps">Firm-wide · Editable templates · AI-indexed</div></div><button class="btn-ap">+ New Document</button></div>
+<div class="card card-pad" style="margin-bottom:11px"><div class="ct">Pinned Templates — Edit Anytime</div>
+  <div class="docs-grid">
+    ${[['📝','Demand Letter Template','Edited 2 days ago · AI-assisted'],['📋','Retainer Agreement','1 week ago · E-sign ready'],['⚖️','Med Mal Chronology','Today · Auto-fills from records'],['📄','SOL Tracker Sheet','Auto-updated · Workflow'],['✉️','Client Update Email','Milestone-triggered · Template'],['📁','Case File Checklist','Standard intake · Editable'],['🛡','Privilege Audit Form','ABA 512 compliant'],['📊','ROI Report Template','Monthly · Auto-populated']].map(([i,n,m])=>`<div class="doc-card"><div class="doc-icon">${i}</div><div style="font-size:12px;font-weight:600;margin-bottom:2px">${n}</div><div class="doc-meta">${m}</div></div>`).join('')}
+  </div>
+</div>
+<div class="card card-pad"><div class="ct">Recent Documents</div>
+  <table class="jt"><thead><tr><th>Document</th><th>Type</th><th>Modified</th><th>By</th><th>Action</th></tr></thead><tbody>
+    ${[['Martinez Demand Draft v2','Demand','Today 9:15 AM','AI','Review'],['Johnson Chronology','Chronology','Today 8:52 AM','Maria L.','Open'],['Davis SOL Alert','Alert','Today 8:30 AM','System','View'],['Williams Settlement Memo','Memo','Yesterday','James K.','Open'],['Retainer — Santos','Retainer','May 9','Karen C.','E-Sign']].map(([n,t,m,by,a])=>`<tr><td style="font-weight:600">${n}</td><td><span class="b bgr">${t}</span></td><td style="font-size:10.5px;color:var(--muted)">${m}</td><td style="font-size:10.5px;color:var(--muted)">${by}</td><td><button class="btn-ag" style="font-size:10.5px;padding:3px 9px">${a}</button></td></tr>`).join('')}
+  </tbody></table>
+</div>`;}
+
+function pgAudit(){return`
+<div class="ph"><div><div class="pt">Audit Trail</div><div class="ps">All actions logged · Privilege protected</div></div><span class="b bg">● All Actions Logged</span></div>
+<div class="card card-pad" style="margin-bottom:11px"><div class="ct">Today's Privilege Audit Log · Jun 09, 2026</div>
+  ${[['09:47','TBI Lead — Johnson, T. — Intake via LB Voice Agent. Conflict check: Clear. Score 87/100. CRM pushed.','LOCAL'],['09:31','AI alert dispatched to James K. — TBI lead score 87.','LOCAL'],['09:15','Martinez Demand — Draft generated by AI workflow. Sent to attorney review queue.','LOCAL'],['08:52','Johnson Records — 1,847 pages indexed by AI. Treatment gap flagged April. Logged to audit.','LOCAL'],['08:30','Davis SOL Alert — 36 days to statute. Email sent via internal SMTP.','ALERT'],['07:14','Thompson, C. — Lead rejected. Gate 1 conflict. Routed to referral portal. No attorney time used.','LOCAL'],['02:18','LB Voice Agent captured TBI lead at 2:18 AM. Score 87. Attorney alerted 8 AM.','LOCAL'],['00:00','Daily Privilege Audit — All AI actions logged. All PHI processed securely. Backup completed.','CLOUD']].map(([t,tx,tag])=>`<div class="aud-row"><div class="aud-t">${t}</div><div class="aud-tx">${tx}</div><span class="aud-tag ${tag==='LOCAL'?'at-l':tag==='ALERT'?'at-a':'at-z'}">${tag}</span></div>`).join('')}
+</div>
+<div style="text-align:center;background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.14);border-radius:var(--r);padding:18px">
+  <div style="font-size:32px;font-weight:800;color:var(--green)">100%</div>
+  <div style="font-size:12.5px;color:var(--muted);margin-top:4px">Actions logged · Nothing missed · Full ABA compliance</div>
+</div>`;}
+
+function pgReferral(){return`
+<div class="ph"><div><div class="pt">Referral Portal</div><div class="ps">3 Partners Active · Conflict-rejected leads auto-routed</div></div></div>
+<div class="card card-pad"><div class="ct">Active Referral Partners</div>
+  ${[['CH','Dr. Carlos Hernandez','Hernandez Chiropractic · Austin TX','14 cases','$42K','#14B8A6'],['AC','Austin Care Clinic','Multi-specialty · South Austin','8 cases','$19K','#3B82F6'],['RW','Robert Watts, Esq.','Watts Law · Workers Comp','5 cases','$28K','#10B981']].map(([i,n,s,c,f,col])=>`<div class="partner-card"><div class="partner-av" style="background:${col}22;color:${col}">${i}</div><div style="flex:1"><div style="font-size:12.5px;font-weight:700">${n}</div><div style="font-size:11px;color:var(--muted)">${s}</div></div><div style="text-align:right;font-size:11px;margin-right:10px"><div style="color:var(--muted)">${c}</div><div style="font-weight:700;color:var(--green)">${f}</div></div><button class="btn-ag" style="font-size:10.5px;padding:4px 9px">Send Lead →</button></div>`).join('')}
+</div>
+<div class="card card-pad" style="margin-top:11px"><div class="ct">Rejected Leads — Ready to Refer</div>
+  ${[['Thompson, Craig','Car accident · Score 82 · Rejected: conflict of interest','Gate 1 Fail'],['Garcia, Rosa','Slip & fall · Score 61 · Rejected: jurisdiction','Gate 3 Fail']].map(([n,d,r])=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><div style="font-size:12.5px;font-weight:700">${n}</div><span class="b br">${r}</span></div><div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">${d}</div><div style="display:flex;gap:6px"><button class="btn-ag" style="font-size:10.5px;padding:3px 9px">Skip</button><button class="btn-ap" style="font-size:10.5px;padding:3px 11px">Send to Partner →</button></div></div>`).join('')}
+</div>`;}
+
+function pgIntegrations(){return`
+<div class="ph"><div><div class="pt">Integrations</div><div class="ps">All tools connected · One window</div></div><button class="btn-ap">+ Add Integration</button></div>
+<div class="card card-pad"><div class="ct">Connected Tools</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    ${[{i:'🗂️',n:'Clio',s:'Case management · CRM',c:true,l:'Connected · 23 cases synced'},{i:'📧',n:'Gmail',s:'Email · Client comms',c:true,l:'Connected · 47 threads'},{i:'📠',n:'eFax · RingCentral',s:'Fax send & receive',c:false,l:'Not connected'},{i:'✍️',n:'DocuSign',s:'E-signatures · Retainers',c:true,l:'Connected · 8 pending'},{i:'📋',n:'MyCase',s:'Alt. case management',c:false,l:'Not connected'},{i:'💰',n:'LawPay',s:'Billing & payments',c:false,l:'Not connected'},{i:'📞',n:'LB Voice Agent',s:'After-hours intake AI',c:true,l:'Live · 43 leads this month'},{i:'⚡',n:'n8n Workflows',s:'Automation engine',c:true,l:'12 workflows running'},{i:'🤖',n:'AI Assistant',s:'Cloud AI · Privilege-logged',c:true,l:'Online · All actions logged'},{i:'🗃️',n:'Secure Database',s:'Encrypted cloud DB',c:true,l:'Online · 3.2GB used'}].map(t=>`<div style="background:var(--surface2);border:1px solid ${t.c?'rgba(37,99,235,.2)':'var(--border)'};border-radius:var(--rs);padding:11px;display:flex;align-items:center;gap:9px"><span style="font-size:17px">${t.i}</span><div style="flex:1"><div style="font-size:12px;font-weight:600">${t.n}</div><div style="font-size:10px;color:var(--muted)">${t.s}</div><div style="font-size:9.5px;color:${t.c?'var(--green)':'var(--muted)'};margin-top:2px">${t.l}</div></div><span class="b ${t.c?'bg':'bgr'}">${t.c?'Live':'Connect'}</span></div>`).join('')}
+  </div>
+</div>`;}
+
+function pgIntakeForm(){return`
+<div class="ph"><div><div class="pt">New Intake</div><div class="ps">Auto-scored · Conflict checked · CRM in 42 seconds</div></div></div>
+<div style="display:grid;grid-template-columns:1fr 340px;gap:13px">
+  <div class="card card-pad">
+    <div class="ct">Client Information</div>
+    <div class="af-row"><div class="af-group"><label class="af-label">First Name</label><input class="af-input" placeholder="Juan"></div><div class="af-group"><label class="af-label">Last Name</label><input class="af-input" placeholder="Martinez"></div></div>
+    <div class="af-row"><div class="af-group"><label class="af-label">Phone</label><input class="af-input" placeholder="(512) 555-0100"></div><div class="af-group"><label class="af-label">Email</label><input class="af-input" type="email" placeholder="juan@email.com"></div></div>
+    <div class="af-group"><label class="af-label">Case Type</label><select class="af-select"><option>Select type...</option><option>Trucking Accident · TBI</option><option>Car Accident · General</option><option>Car Accident · TBI</option><option>Medical Malpractice</option><option>Slip & Fall</option><option>Wrongful Death</option></select></div>
+    <div class="af-row"><div class="af-group"><label class="af-label">Incident Date</label><input class="af-input" type="date"></div><div class="af-group"><label class="af-label">State</label><select class="af-select"><option>Texas</option><option>California</option><option>Florida</option></select></div></div>
+    <div class="af-group"><label class="af-label">Description</label><textarea class="af-input" rows="3" placeholder="Brief description of what happened..." style="resize:vertical"></textarea></div>
+    <div class="af-group"><label class="af-label">Referral Source</label><select class="af-select"><option>Web search</option><option>LB Voice Agent (after-hours)</option><option>Referral partner</option><option>Existing client</option><option>Other</option></select></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:11px">
+    <div class="card card-pad"><div class="ct">AI Lead Scoring</div>
+      <div style="display:flex;align-items:center;gap:11px;margin-bottom:9px">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(37,99,235,.12);color:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800">—</div>
+        <div><div style="font-size:12px;font-weight:700">Score pending</div><div style="font-size:10.5px;color:var(--muted)">Fill form to auto-score</div></div>
+      </div>
+      <div style="font-size:10.5px;color:var(--muted)">AI scores 0–100 on submit · All actions logged</div>
+    </div>
+    <div class="card card-pad"><div class="ct">Automated Gates</div>
+      ${[['Gate 1','Conflict of interest','Pending'],['Gate 2','AI lead score ≥65','Pending'],['Gate 3','SOL / jurisdiction','Pending']].map(([g,d,s])=>`<div class="inf-row"><span class="b bgr">${g}</span><div style="flex:1;font-size:11.5px">${d}</div><span style="font-size:10.5px;color:var(--muted)">${s}</span></div>`).join('')}
+    </div>
+    <div class="card card-pad"><div class="ct">What Happens Next</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.9">1. AI conflict check (instant)<br>2. Lead scored 0–100<br>3. SOL deadline calculated<br>4. CRM entry in ~42 seconds<br>5. Attorney alerted<br>6. Client confirmation SMS</div>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button class="btn-ag" style="flex:1">Save Draft</button>
+      <button class="btn-ap" style="flex:2" onclick="alert('Intake submitted. Lead scored and pushed to CRM.')">Submit Intake →</button>
+    </div>
+  </div>
+</div>`;}
+
+// ── INIT ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  // ensure correct initial state
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='none';
+});
+</script>
+</body>
+</html>
